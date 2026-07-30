@@ -1,0 +1,34 @@
+# Environment files — never commit these
+.env
+.env.local
+.env.production
+.env.development
+*.env
+backend/.env
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+frontend/.vercel
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/.venv/
+backend/venv/
+backend/tmp/
+
+# Editor / tool config
+.obsidian/
+.claude/
+
+# Web app code — tracked separately
+frontend/
+backend/
+
+# General
+.DS_Store
+Thumbs.db
+*.log
