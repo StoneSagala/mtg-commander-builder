@@ -32,56 +32,24 @@ import argparse
 import urllib.request
 import urllib.parse
 import urllib.error
-from itertools import combinations
-
-SPELLBOOK_API = "https://backend.commanderspellbook.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-
-
-def api_get(path, params=None):
-    """Make a GET request to Commander Spellbook API."""
-    time.sleep(0.15)
-    url = f"{SPELLBOOK_API}{path}"
-    if params:
-        url += "?" + urllib.parse.urlencode(params)
-    req = urllib.request.Request(
-        url,
-        headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
-    )
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read().decode("utf-8"))
-
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_shared"))
+from combos import find_deck, find_cards, parse_deck
 
 def search_combos_by_card(card_name):
-    """Find all combos containing a specific card."""
-    data = api_get("/api/v1/variants/", {"q": f'card:"{card_name}"', "limit": 50})
-    return data.get("results", [])
+    return search_combos_by_cards([card_name])
 
 
 def search_combos_by_cards(card_names):
-    """Find combos that use ALL of the specified cards."""
-    # Build query: card:"Name1" card:"Name2" ...
-    query = " ".join(f'card:"{name}"' for name in card_names)
-    data = api_get("/api/v1/variants/", {"q": query, "limit": 20})
-    return data.get("results", [])
+    report = find_cards(card_names)
+    if not report['complete']:
+        raise ValueError('Combo search incomplete: ' + '; '.join(report['errors']))
+    return report['variants']
 
 
 def parse_decklist(filepath):
-    """Parse a decklist markdown file and return card names."""
-    cards = []
-    with open(filepath, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#") or line.startswith("//"):
-                continue
-            if line.startswith("Commander:") or line.startswith("##"):
-                continue
-            parts = line.split(None, 1)
-            if len(parts) == 2 and (parts[0].isdigit() or parts[0].rstrip("x").isdigit()):
-                cards.append(parts[1].strip())
-            elif len(parts) == 1 and not parts[0][0].isdigit():
-                cards.append(parts[0])
-    return cards
+    main, commanders = parse_deck(filepath)
+    return main + commanders
 
 
 def extract_combo_details(variant):
@@ -104,6 +72,10 @@ def extract_combo_details(variant):
         name = template.get("name", "")
         if name:
             requires.append(name)
+
+    for field in ("easyPrerequisites", "notablePrerequisites"):
+        if variant.get(field):
+            requires.append(variant[field])
 
     # What the combo produces
     produces = []
@@ -131,55 +103,16 @@ def extract_combo_details(variant):
         "produces": produces,
         "description": description,
         "notes": notes,
-        "legal_commander": variant.get("legalCommander", True),
+        "legal_commander": variant.get("legalities", {}).get("commander", variant.get("legalCommander", False)),
         "spoiler": variant.get("spoiler", False),
     }
 
 
 def check_deck_for_combos(card_names, min_combo_size=2, max_combo_size=4):
-    """
-    Check a full decklist for known combos.
-    Tests combinations of 2, 3, and 4 cards against Spellbook.
-    Returns list of found combos.
-    """
-    found = []
-    seen_ids = set()
-
-    print(f"  Checking {len(card_names)} cards for combos (sizes {min_combo_size}-{max_combo_size})...")
-
-    # First pass: check each card individually to find potential combo pieces
-    candidate_cards = set()
-    for i, card in enumerate(card_names):
-        print(f"  Scanning card {i+1}/{len(card_names)}: {card[:40]:<40}", end="\r", flush=True)
-        try:
-            results = search_combos_by_card(card)
-            if results:
-                candidate_cards.add(card)
-        except urllib.error.HTTPError:
-            pass
-
-    print(" " * 70, end="\r")
-    print(f"  Found {len(candidate_cards)} potential combo pieces. Checking combinations...")
-
-    # Second pass: check combinations of candidate cards
-    candidates = list(candidate_cards)
-    for size in range(min_combo_size, min(max_combo_size + 1, len(candidates) + 1)):
-        for combo_cards in combinations(candidates, size):
-            try:
-                results = search_combos_by_cards(list(combo_cards))
-                for variant in results:
-                    combo = extract_combo_details(variant)
-                    if combo["id"] not in seen_ids:
-                        # Verify all combo cards are actually in the deck
-                        combo_card_names = {c["name"].lower() for c in combo["cards"]}
-                        deck_names = {n.lower() for n in card_names}
-                        if combo_card_names.issubset(deck_names):
-                            seen_ids.add(combo["id"])
-                            found.append(combo)
-            except urllib.error.HTTPError:
-                pass
-
-    return found
+    report = find_deck(card_names)
+    if not report['complete']:
+        raise ValueError('Combo check incomplete: ' + '; '.join(report['errors']))
+    return [extract_combo_details(v) for v in report['variants']]
 
 
 def print_combo(combo, index=None):
@@ -273,33 +206,34 @@ def main():
                        help="Single card name — find all combos it appears in")
     group.add_argument("--file", metavar="PATH",
                        help="Decklist file — find all combos in the list")
+    parser.add_argument("--max-pages", type=int, default=10, help="Bound on requests; reaching it reports incomplete")
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args()
 
     try:
-        if args.cards:
-            print(f"Checking combo: {' + '.join(args.cards)}...")
-            results = search_combos_by_cards(args.cards)
-            combos = [extract_combo_details(v) for v in results]
-            source = " + ".join(args.cards)
-
-        elif args.card:
-            print(f"Finding all combos for: {args.card}...")
-            results = search_combos_by_card(args.card)
-            combos = [extract_combo_details(v) for v in results]
-            source = args.card
-
-        else:  # --file
-            print(f"Parsing decklist: {args.file}...")
-            card_names = parse_decklist(args.file)
-            print(f"  Found {len(card_names)} cards.")
-            combos = check_deck_for_combos(card_names)
+        if args.max_pages < 1:
+            parser.error('--max-pages must be positive')
+        if args.file:
+            main, commanders = parse_deck(args.file)
+            report = find_deck(main, commanders, args.max_pages)
             source = args.file
-
-        if args.format == "json":
-            print(json.dumps(combos, indent=2))
         else:
-            print_results(combos, source)
+            names = args.cards or [args.card]
+            report = find_cards(names, args.max_pages)
+            source = ' + '.join(names)
+        combos = [extract_combo_details(v) for v in report.pop('variants')]
+        report['combos'] = combos
+        if args.format == 'json':
+            print(json.dumps(report, indent=2))
+        else:
+            if not report['complete']:
+                print('INCOMPLETE CHECK: ' + '; '.join(report['errors']))
+                print(f'{len(combos)} confirmed database records retained; do not infer absence.')
+                for index, combo in enumerate(combos, 1):
+                    print_combo(combo, index)
+            else:
+                print_results(combos, source)
+        sys.exit(0 if report['complete'] else 2)
 
     except urllib.error.HTTPError as e:
         print(f"\nHTTP Error {e.code}: {e.reason}")

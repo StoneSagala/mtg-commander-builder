@@ -53,10 +53,11 @@ Commander damage is a single-path win con — the commander IS the win condition
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–3:** Voltron with equipment and auras is the primary expression
-- **Bracket 4–5:** Infect commanders (21 → 10 poison counters), one-shot kills via Berserk/Hatred
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

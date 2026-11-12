@@ -11,12 +11,20 @@ Builds a Commander deck from scratch using a completed build brief. Every phase 
 
 ## Phase 0: Read the Brief + Run Setup Scripts
 
-Before anything else, run these five scripts in parallel where possible — they front-load all data fetching so no searching or calculating happens during card selection.
+Read the approved brief first. Run setup tools without overwriting it. Follow `_shared/data-sources.md` if any provider fails; a transport or parser failure does not establish that a commander is new or unsupported.
+
+**0. Refresh current rules and references:**
+```bash
+python3 _system/refresh-data.py
+```
+Do not proceed with a current-rules claim if this fails or reports an unreviewed rule change.
 
 **1. Verify color identity (ground truth from Scryfall):**
 ```bash
 python deckbuilding/scripts/validate-color-identity.py --commander "[Commander Name]" --identity-only
 ```
+
+For paired commanders, verify each card and use their combined identity. Pass `--partner "Second Name"` to generation and comprehensive validation. A first-commander-only identity lookup is not the pair's identity.
 
 **2. Auto-generate starter draft (replaces manual card selection phases):**
 ```bash
@@ -26,18 +34,18 @@ python deckbuilding/scripts/generate-starter-deck.py \
   --engine [slug] \
   --game-plan [slug] \
   --win-con [slug] \
-  --budget [amount] \
-  --output deckbuilding/brews/[slug]-draft.md
+  --budget [player-approved total, omit for no limit] \
+  --output deckbuilding/brews/[slug]-generated.md
 ```
-This script fetches EDHREC staples, enriches prices from Scryfall, calculates targets, and auto-fills ~85-95% of the deck by synergy score. The output file is the working draft — you review and swap, not build from scratch. If the EDHREC pool is thin (niche commander), the summary will warn you how many slots are unfilled.
+This script resolves the commander through Scryfall, loads EDHREC recommendations through its JSON feed, and assigns provisional roles using Scryfall text. If EDHREC fails, it uses a clearly labelled generic legal-color Scryfall pool. Output coverage varies; win conditions require manual strategy review. Preserve `[slug]-draft.md` as the approved brief and review `[slug]-generated.md` alongside it. `--budget` is the optional total for this player's deck, including commanders and all land copies. Omit it when the player has no spending limit. Unknown prices cannot be treated as free. The generator substitutes affordable candidates and reports any remaining gaps; validate again after manual swaps.
 
-**Art/flavor themed deck?** Add `--art-theme "keyword1 keyword2"`. Theme slots are filled by Scryfall art search instead of EDHREC synergy — structural slots (ramp, draw, interaction) still come from EDHREC. First run `fetch-art-cards.py` to explore which keywords return good results:
+**Art/flavor themed deck?** Add `--art-theme "keyword1 keyword2"`. Theme slots are filled by Scryfall art search instead of EDHREC synergy — structural slots (ramp, draw, interaction) use the verified EDHREC/Scryfall strategy pool. First run `fetch-art-cards.py` to explore which keywords return good results:
 ```bash
 python deckbuilding/scripts/fetch-art-cards.py --art "smile balloon" --color-identity WR
 python deckbuilding/scripts/generate-starter-deck.py \
   --commander "Pinkie Pie" --bracket 3 --engine tokens --game-plan go-wide --win-con life-depletion \
   --art-theme "smile balloon party" --budget 200 \
-  --output deckbuilding/brews/pinkie-pie-draft.md
+  --output deckbuilding/brews/pinkie-pie-generated.md
 ```
 
 **3. Fetch EDHREC's pre-categorized card pool (for review reference):**
@@ -61,9 +69,9 @@ python deckbuilding/scripts/calculate-target-ratios.py \
   --game-plan [slug] \
   --win-con [slug]
 ```
-Include `--partner "[Partner Name]"` if applicable. The generator uses the same bracket baseline + strategy overrides, but this script additionally detects commander-provided functions (draw, ramp, board control) and adjusts for them. **Compare its output to the generator's targets** — if they differ significantly, the commander provides a function the generator missed. Override those slots during review.
+Include `--partner "[Partner Name]"` if applicable. Both tools import the same baseline and strategy policy from `_shared/ratios.py`; but this script additionally detects commander-provided functions (draw, ramp, board control) and adjusts for them. **Compare its output to the generator's targets** — if they differ significantly, the commander provides a function the generator missed. Override those slots during review.
 
-These five outputs replace all card searching and manual card selection. Do not run Scryfall searches during the brew.
+Use these outputs as evidence, not a hard dependency. If a pool is unavailable, thin, or generic, use `skills/card-search.md` for legal, color-identity-constrained Scryfall searches. Verify each proposed card. Record provider errors and missing packages; continue with available data. If Scryfall cannot verify the commander or its identity, stop generation and repair that connection first.
 
 Then load the brief and extract:
 

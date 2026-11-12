@@ -1,0 +1,101 @@
+{
+  "parsed_files": 33,
+  "cli_help_checks": [
+    {
+      "script": "optimization/scripts/validate-decklist.py",
+      "exit": 0
+    },
+    {
+      "script": "optimization/scripts/goldfish.py",
+      "exit": 0
+    },
+    {
+      "script": "optimization/scripts/color-analysis.py",
+      "exit": 0
+    },
+    {
+      "script": "optimization/scripts/mana-curve.py",
+      "exit": 0
+    },
+    {
+      "script": "optimization/scripts/fetch-deck.py",
+      "exit": 0
+    },
+    {
+      "script": "optimization/scripts/deck-health.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/fetch-reference-lists.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/generate-starter-deck.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/validate-deck.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/export-to-moxfield.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/fetch-card-data.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/validate-combos.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/validate-color-identity.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/fetch-art-cards.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/calculate-target-ratios.py",
+      "exit": 0
+    },
+    {
+      "script": "deckbuilding/scripts/fetch-commander-staples.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/fetch-edhrec-data.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/fetch-top-commanders.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/discover-playstyle.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/match-themes.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/filter-commanders.py",
+      "exit": 0
+    },
+    {
+      "script": "Ideation/scripts/fetch-card-commanders.py",
+      "exit": 0
+    },
+    {
+      "script": "_system/refresh-data.py",
+      "exit": 0
+    },
+    {
+      "script": "_system/audit-connections.py",
+      "exit": 0
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "commander": "Kotis, the Fangkeeper",
+  "bracket": 3,
+  "results": {
+    "card_count": {
+      "pass": false,
+      "total": 96,
+      "detail": "96/100 cards (add 4)"
+    },
+    "singleton": {
+      "pass": true,
+      "duplicates": {},
+      "detail": "No duplicates \u2713"
+    },
+    "commander_legality": {
+      "pass": true,
+      "detail": "Legal commander \u2713"
+    },
+    "color_identity": {
+      "pass": true,
+      "violations": [],
+      "detail": "Color identity OK \u2713"
+    },
+    "ban_list": {
+      "pass": true,
+      "banned_cards": [],
+      "detail": "No banned cards \u2713"
+    },
+    "game_changers": {
+      "pass": true,
+      "found": [
+        "Vampiric Tutor"
+      ],
+      "cap": 3,
+      "detail": "1/3 Game Changers allowed at bracket 3 \u2713"
+    },
+    "extra_turns": {
+      "pass": true,
+      "found": [],
+      "detail": "0 extra turn card(s) \u2014 low quantity only at bracket 3 (none) \u2713"
+    },
+    "mass_land_denial": {
+      "pass": true,
+      "found": [],
+      "detail": "No mass land denial \u2713"
+    },
+    "house_rules": {
+      "pass": true,
+      "found": [],
+      "detail": "No house rules to check"
+    },
+    "budget": {
+      "pass": false,
+      "total": 291.98,
+      "limit": 200.0,
+      "most_expensive": [
+        [
+          "Vampiric Tutor",
+          50.7
+        ],
+        [
+          "Shizo, Death's Storehouse",
+          32.24
+        ],
+        [
+          "Shadowspear",
+          31.2
+        ],
+        [
+          "Damnation",
+          21.57
+        ],
+        [
+          "Delighted Halfling",
+          20.65
+        ]
+      ],
+      "missing_prices": [
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Forest",
+        "Island",
+        "Island",
+        "Island",
+        "Island",
+        "Island",
+        "Island",
+        "Island",
+        "Island",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Swamp",
+        "Felix Five-Boots",
+        "The Thirteenth Doctor"
+      ],
+      "detail": "$291.98 known subtotal / $200.00 \u2014 28 unpriced cards; total budget unverified \u2014 over by $91.98\n           Most expensive: Vampiric Tutor $50.70, Shizo, Death's Storehouse $32.24, Shadowspear $31.20"
+    },
+    "card_resolution": {
+      "pass": true,
+      "detail": "All card names resolved"
+    }
+  },
+  "not_found": [],
+  "all_passed": false
+}

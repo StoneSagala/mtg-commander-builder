@@ -1,0 +1,94 @@
+{
+  "parsed_python_files": 27,
+  "cli_checks": [
+    {
+      "path": "Ideation/scripts/discover-playstyle.py",
+      "help_exit": 0
+    },
+    {
+      "path": "Ideation/scripts/fetch-card-commanders.py",
+      "help_exit": 0
+    },
+    {
+      "path": "Ideation/scripts/fetch-edhrec-data.py",
+      "help_exit": 0
+    },
+    {
+      "path": "Ideation/scripts/fetch-top-commanders.py",
+      "help_exit": 0
+    },
+    {
+      "path": "Ideation/scripts/filter-commanders.py",
+      "help_exit": 0
+    },
+    {
+      "path": "Ideation/scripts/match-themes.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/calculate-target-ratios.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/export-to-moxfield.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-art-cards.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-card-data.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-commander-staples.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-reference-lists.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/generate-starter-deck.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/validate-color-identity.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/validate-combos.py",
+      "help_exit": 0
+    },
+    {
+      "path": "deckbuilding/scripts/validate-deck.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/color-analysis.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/deck-health.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/fetch-deck.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/goldfish.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/mana-curve.py",
+      "help_exit": 0
+    },
+    {
+      "path": "optimization/scripts/validate-decklist.py",
+      "help_exit": 0
+    }
+  ],
+  "excluded_cli": "Ideation/scripts/intake.py is an interactive program, not an argparse CLI"
+}

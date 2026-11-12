@@ -49,11 +49,11 @@ Influence the game through deals, shared value, and table dynamics rather than d
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Group hug is welcome and fun; keep win conditions honest
-- **Bracket 3:** Political stax (Marchesa, Gahiji) adds teeth without breaking the social contract
-- **Brackets 4–5:** Rarely played; political dynamics break down in fast, combo-centric pods
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

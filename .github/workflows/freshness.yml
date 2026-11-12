@@ -1,0 +1,48 @@
+name: Refresh current reference data
+on:
+  schedule:
+    - cron: '15 10 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Refresh sources (semantic rules changes require review)
+        id: refresh
+        continue-on-error: true
+        run: python3 _system/refresh-data.py --all > refresh-report.json 2> refresh-errors.txt
+      - name: Run offline regressions
+        run: python3 -m unittest discover -s tests -v
+      - name: Propose updated reference data
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: maintenance/current-data
+          title: Refresh current Commander reference data
+          commit-message: Refresh Commander reference snapshots
+          body: |
+            Daily provider refresh. Check the attached report and source changes.
+            Game Changer lists and cache snapshots refresh automatically.
+            A changed rules hash requires source review and explicit acceptance;
+            until then, rules-dependent tools stop instead of using outdated rules.
+          add-paths: |
+            _shared/current/
+            deckbuilding/docs/game-changers.md
+            Ideation/docs/brackets.md
+            Ideation/scripts/_cache/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: freshness-report
+          path: |
+            refresh-report.json
+            refresh-errors.txt
+      - name: Surface refresh failure
+        if: steps.refresh.outcome == 'failure'
+        run: exit 1

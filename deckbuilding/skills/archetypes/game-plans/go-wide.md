@@ -40,11 +40,11 @@ Win through quantity. Flood the board with creatures or tokens, then close with 
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Anthem + tokens. Finisher is usually a creature (Craterhoof, Champion of Lambholt)
-- **Bracket 3:** Intangible Virtue, Anointed Procession, parallel token doublers
-- **Bracket 4–5:** Doubling Season, Parallel Lives, Mondrak; Triumph of the Hordes as fast closer
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

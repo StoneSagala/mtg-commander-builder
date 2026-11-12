@@ -1,0 +1,156 @@
+{
+  "game_changers": {
+    "White": [
+      "Drannith Magistrate",
+      "Enlightened Tutor",
+      "Farewell",
+      "Humility",
+      "Serra's Sanctum",
+      "Smothering Tithe",
+      "Teferi's Protection"
+    ],
+    "Blue": [
+      "Consecrated Sphinx",
+      "Cyclonic Rift",
+      "Force of Will",
+      "Fierce Guardianship",
+      "Gifts Ungiven",
+      "Intuition",
+      "Mystical Tutor",
+      "Narset, Parter of Veils",
+      "Rhystic Study",
+      "Thassa's Oracle"
+    ],
+    "Black": [
+      "Ad Nauseam",
+      "Bolas's Citadel",
+      "Braids, Cabal Minion",
+      "Demonic Tutor",
+      "Imperial Seal",
+      "Necropotence",
+      "Opposition Agent",
+      "Orcish Bowmasters",
+      "Tergrid, God of Fright",
+      "Vampiric Tutor"
+    ],
+    "Red": [
+      "Gamble",
+      "Jeska's Will",
+      "Underworld Breach"
+    ],
+    "Green": [
+      "Crop Rotation",
+      "Biorhythm",
+      "Gaea's Cradle",
+      "Natural Order",
+      "Seedborn Muse",
+      "Survival of the Fittest",
+      "Worldly Tutor"
+    ],
+    "Multicolor": [
+      "Aura Shards",
+      "Coalition Victory",
+      "Grand Arbiter Augustin IV",
+      "Notion Thief"
+    ],
+    "Colorless": [
+      "Ancient Tomb",
+      "Chrome Mox",
+      "Field of the Dead",
+      "Glacial Chasm",
+      "Grim Monolith",
+      "Lion's Eye Diamond",
+      "Mana Vault",
+      "Mishra's Workshop",
+      "Mox Diamond",
+      "Panoptic Mirror",
+      "The One Ring",
+      "The Tabernacle at Pendrell Vale"
+    ]
+  },
+  "brackets": {
+    "1": {
+      "name": "Exhibition",
+      "expected_min_turns": 9,
+      "game_changers_max": 0
+    },
+    "2": {
+      "name": "Core",
+      "expected_min_turns": 8,
+      "game_changers_max": 0
+    },
+    "3": {
+      "name": "Upgraded",
+      "expected_min_turns": 6,
+      "game_changers_max": 3
+    },
+    "4": {
+      "name": "Optimized",
+      "expected_min_turns": 4,
+      "game_changers_max": null
+    },
+    "5": {
+      "name": "cEDH",
+      "expected_min_turns": null,
+      "game_changers_max": null
+    }
+  },
+  "rules_hash": "dde99d9c91d5a5078b9971a2be246e23f2114da784ad8f94b223a155f982d78c",
+  "data_hash": "9a758f34f6d7cd1df5baf58e591eda192d3e1906adad27e7b8929e32010117d2",
+  "banned_cards": [
+    "Ancestral Recall",
+    "Balance",
+    "Black Lotus",
+    "Chaos Orb",
+    "Channel",
+    "Dockside Extortionist",
+    "Emrakul, the Aeons Torn",
+    "Erayo, Soratami Ascendant",
+    "Falling Star",
+    "Fastbond",
+    "Flash",
+    "Golos, Tireless Pilgrim",
+    "Griselbrand",
+    "Hullbreacher",
+    "Iona, Shield of Emeria",
+    "Karakas",
+    "Jeweled Lotus",
+    "Leovold, Emissary of Trest",
+    "Library of Alexandria",
+    "Limited Resources",
+    "Mana Crypt",
+    "Mox Emerald",
+    "Mox Jet",
+    "Mox Pearl",
+    "Mox Ruby",
+    "Mox Sapphire",
+    "Nadu, Winged Wisdom",
+    "Paradox Engine",
+    "Primeval Titan",
+    "Prophet of Kruphix",
+    "Recurring Nightmare",
+    "Rofellos, Llanowar Emissary",
+    "Shahrazad",
+    "Sundering Titan",
+    "Sylvan Primordial",
+    "Time Vault",
+    "Time Walk",
+    "Tinker",
+    "Tolarian Academy",
+    "Trade Secrets",
+    "Upheaval",
+    "Yawgmoth's Bargain"
+  ],
+  "companion_only_bans": [
+    "Lutri, the Spellchaser"
+  ],
+  "special_ban_categories": [
+    "Conspiracy type",
+    "Playing for ante",
+    "Offensive depictions identified by Wizards"
+  ],
+  "banned_source": "https://magic.wizards.com/en/banned-restricted-list",
+  "source": "https://magic.wizards.com/en/formats/commander",
+  "checked_at": "2026-11-12T17:13:21.185758+00:00",
+  "schema_version": 1
+}

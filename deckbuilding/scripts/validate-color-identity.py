@@ -30,7 +30,7 @@ import urllib.parse
 import urllib.error
 
 SCRYFALL_BASE = "https://api.scryfall.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 COLOR_NAMES = {
     "W": "White",
@@ -57,7 +57,7 @@ def scryfall_get(url):
         url,
         headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 

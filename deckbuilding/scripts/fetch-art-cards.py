@@ -41,7 +41,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
 SCRYFALL_BASE = "https://api.scryfall.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 
 def build_query(art_keywords, color_identity):
@@ -70,7 +70,7 @@ def fetch_page(url):
         headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
     )
     try:
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             return json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         if e.code == 404:

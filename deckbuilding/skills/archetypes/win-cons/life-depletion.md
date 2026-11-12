@@ -38,11 +38,11 @@ Run **2–3 distinct damage paths**. If your only damage source is creatures and
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Combat is primary. Burn and drain are incidental.
-- **Bracket 3:** Drain loops become viable. Exquisite Blood + Sanguine Bond as a secondary win.
-- **Bracket 4–5:** Torment of Hailfire, Peer into the Abyss, Aetherflux Reservoir as primary closers.
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

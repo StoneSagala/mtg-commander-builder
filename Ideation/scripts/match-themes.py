@@ -26,10 +26,16 @@ from pathlib import Path
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
+
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_shared"))
+from data_sources import edhrec_page
+from freshness import atomic_json
+
 EDHREC_BASE = "https://edhrec.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 CACHE_FILE = Path(__file__).parent / "_cache" / "themes-cache.json"
-CACHE_MAX_AGE_DAYS = 7
+CACHE_MAX_AGE_DAYS = json.loads((Path(__file__).resolve().parents[2] / "_system/data-policy.json").read_text())["themes_hours"] / 24
 
 # Synonym map: player words → EDHREC theme words/slugs they should match
 # Keys are words a player might say; values are theme name fragments to boost
@@ -98,15 +104,7 @@ SYNONYMS = {
 
 def fetch_themes():
     """Fetch all themes from EDHREC /tags page."""
-    time.sleep(0.2)
-    url = f"{EDHREC_BASE}/tags"
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(req) as resp:
-        html = resp.read().decode("utf-8")
-    match = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-    if not match:
-        raise ValueError("No NEXT_DATA found at /tags")
-    data = json.loads(match.group(1))["props"]["pageProps"]["data"]
+    data = edhrec_page("tags")
     cardlists = data["container"]["json_dict"]["cardlists"]
     tags_list = next(
         (cl for cl in cardlists if cl.get("tag") == "tagsbypopularitysort"), None
@@ -129,17 +127,19 @@ def load_cache():
     with open(CACHE_FILE) as f:
         data = json.load(f)
     # Check age
-    fetched_ts = data.get("fetched_at", 0)
+    try:
+        fetched_ts = float(data.get("fetched_at", 0))
+    except (ValueError, TypeError):
+        return None
     age_days = (time.time() - fetched_ts) / 86400
-    if age_days > CACHE_MAX_AGE_DAYS:
+    if age_days < 0 or age_days >= CACHE_MAX_AGE_DAYS:
         return None
     return data.get("themes", [])
 
 
 def save_cache(themes):
     data = {"fetched_at": time.time(), "themes": themes}
-    with open(CACHE_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+    atomic_json(CACHE_FILE, data)
 
 
 def get_themes(refresh=False):

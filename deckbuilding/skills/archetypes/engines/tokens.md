@@ -53,11 +53,11 @@ Building primarily around creature tokens is most common. Mixed token types requ
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Single token doublers; Avenger of Zendikar as finisher; basic anthems
-- **Bracket 3:** Parallel Lives + Anointed Procession; Craterhoof Behemoth as overrun finisher
-- **Brackets 4–5:** Doubling Season (enables instant planeswalker ultimates); Mondrak; Skullclamp as draw engine on 1/1s
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

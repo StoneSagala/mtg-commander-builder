@@ -52,11 +52,11 @@ Examples of asymmetric stax:
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Stax is inappropriate (check house rules); basic tax effects only
-- **Bracket 3:** 2–3 light tax pieces (Rhystic Study, Smothering Tithe); avoid hard locks
-- **Bracket 4–5:** Full stax packages (Winter Orb, Static Orb, Tangle Wire); asymmetric fast mana to break parity
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

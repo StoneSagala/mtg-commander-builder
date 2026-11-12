@@ -50,11 +50,11 @@ Deal damage to opponents through spells, triggered abilities, and permanents rat
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Burn is usually a secondary plan (incidental Purphoros triggers)
-- **Bracket 3:** Purphoros + mass token generation as a dedicated line
-- **Brackets 4–5:** Storm-based burn (Aetherflux Reservoir; Grapeshot); Gitrog Monster dark ritual lines
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

@@ -49,11 +49,11 @@ Most theft/chaos decks blend both — use theft for precision, chaos for general
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Light theft as a fun element; Gonti, Bribery as highlight cards
-- **Bracket 3:** Etali, Primal Storm as a game-swinging threat; Possibility Storm as disruption
-- **Brackets 4–5:** Ragavan for early acceleration; Dack Fayden + artifact theft; Hive Mind + Pact combos
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

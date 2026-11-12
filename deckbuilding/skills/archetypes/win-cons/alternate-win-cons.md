@@ -59,11 +59,11 @@ Win by meeting a specific card condition rather than reducing life, dealing comm
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Condition-based wins are generally accepted (not combo-explosive)
-- **Brackets 3–4:** All are viable; flag Thassa's Oracle explicitly (it's combo-adjacent)
-- **Bracket 5 (cEDH):** Thassa's Oracle is the dominant alt win con; others are too slow
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

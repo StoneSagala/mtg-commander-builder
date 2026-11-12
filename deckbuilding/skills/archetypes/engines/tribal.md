@@ -54,11 +54,11 @@ Kindred Discovery · Distant Melody · Vanquisher's Banner · Coat of Arms · Ca
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Lords + tribe members; Coat of Arms; Herald's Horn
-- **Bracket 3:** Kindred Discovery; Cavern of Souls; tribe-specific combo lines (Krenko + Skirk Prospector)
-- **Brackets 4–5:** Changelings as universal tribe members; The First Sliver cascade chain
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

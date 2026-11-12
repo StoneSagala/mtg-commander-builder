@@ -1,0 +1,12 @@
+{
+  "commander_rules_hours": 24,
+  "themes_hours": 168,
+  "popularity_hours": 168,
+  "card_data": "fetch live each build or validation",
+  "prices": "fetch live each build or validation; USD nonfoil estimates, not purchase quotes",
+  "combos": "fetch live each check, bounded pagination; incomplete checks cannot certify absence",
+  "source": "https://magic.wizards.com/en/formats/commander",
+  "on_expiry": "refresh before use; if refresh fails, stop rules-dependent generation/validation",
+  "on_rule_change": "record new snapshot and require review of the changed rule hash before rules-dependent work",
+  "banned_source": "https://magic.wizards.com/en/banned-restricted-list"
+}

@@ -4,7 +4,7 @@ generate-starter-deck.py — Auto-generate a 100-card Commander draft from EDHRE
 
 Fetches EDHREC's pre-categorized card pool, calculates target slot counts from the
 bracket baseline and strategy overrides, and auto-selects cards by synergy score.
-Outputs a nearly-complete draft (~85-95% filled). The AI then reviews and swaps in
+Outputs a provisional draft with explicit missing slots. The AI then reviews and swaps in
 non-negotiables and special synergy pieces — one review pass instead of six selection
 phases.
 
@@ -39,89 +39,17 @@ import datetime
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
-EDHREC_BASE = "https://edhrec.com"
+
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_shared"))
+from data_sources import commander_pool, slugify, request_json
+from freshness import current_rules
+from ratios import BRACKET_BASELINES, STRATEGY_OVERRIDES
+from deck_budget import cents, price_cards, constrain_deck
+
 SCRYFALL_BASE = "https://api.scryfall.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
-
-# ─── Bracket baselines (midpoint of ranges from calculate-target-ratios.py) ───
-
-BRACKET_TARGETS = {
-    1: {"lands": 37, "ramp": 11, "card_draw": 9, "interaction": 11, "board_wipes": 2, "win_cons": 6, "tutors": 1},
-    2: {"lands": 37, "ramp": 11, "card_draw": 9, "interaction": 11, "board_wipes": 2, "win_cons": 6, "tutors": 1},
-    3: {"lands": 36, "ramp": 9,  "card_draw": 9, "interaction": 9,  "board_wipes": 2, "win_cons": 6, "tutors": 2},
-    4: {"lands": 34, "ramp": 9,  "card_draw": 9, "interaction": 10, "board_wipes": 1, "win_cons": 3, "tutors": 6},
-    5: {"lands": 30, "ramp": 6,  "card_draw": 7, "interaction": 10, "board_wipes": 0, "win_cons": 1, "tutors": 10},
-}
-
-# Strategy adjustments (same logic as calculate-target-ratios.py)
-STRATEGY_ADJUSTMENTS = {
-    "graveyard":          {"lands": -1},
-    "lands":              {"lands": +4, "ramp": -2},
-    "enchantress":        {"card_draw": -2},
-    "spellslinger":       {"card_draw": -1},
-    "combo":              {"win_cons": -2, "tutors": +3},
-    "stax":               {"interaction": +2, "board_wipes": -1},
-    "control":            {"interaction": +2, "win_cons": -1},
-    "commander-damage":   {"win_cons": -2},
-    "alternate-win-cons": {"win_cons": -2, "tutors": +2},
-}
-
-
-# ─── EDHREC category → deck slot mapping ─────────────────────────────────────
-
-CATEGORY_TO_SLOT = {
-    "Ramp":             "ramp",
-    "Card Draw":        "card_draw",
-    "Removal":          "interaction",
-    "Board Wipes":      "board_wipes",
-    "Counterspells":    "interaction",
-    "Protection":       "interaction",
-    "Tutors":           "tutors",
-    "Win Conditions":   "win_cons",
-    "High Synergy":     "theme",
-    "Lands":            "utility_lands",
-    "Creatures":        "theme",
-    "Graveyard":        "theme",
-    "Self-Mill":        "theme",
-    "Enchantments":     "theme",
-    "Artifacts":        "theme",
-    "Instants":         "theme",
-    "Sorceries":        "theme",
-    "Sacrifice":        "theme",
-    "Discard":          "theme",
-    "New Cards":        "theme",
-    "Token Generators": "theme",
-    "Tribal":           "theme",
-    "Voltron":          "theme",
-    "Planeswalkers":    "theme",
-}
-
-# EDHREC tag → human category (duplicated from fetch-commander-staples.py)
-CATEGORY_MAP = {
-    "ramp": "Ramp", "manaartifacts": "Ramp", "mana-artifacts": "Ramp", "manaartefacts": "Ramp",
-    "carddraw": "Card Draw", "card-draw": "Card Draw", "draw": "Card Draw", "cardadvantage": "Card Draw",
-    "removal": "Removal", "targetedremoval": "Removal", "targeted-removal": "Removal", "singleremoval": "Removal",
-    "boardwipes": "Board Wipes", "board-wipes": "Board Wipes", "massdestruction": "Board Wipes", "sweepers": "Board Wipes",
-    "protection": "Protection",
-    "countermagic": "Counterspells", "counter-magic": "Counterspells", "counterspells": "Counterspells",
-    "lands": "Lands", "land": "Lands", "utilitylands": "Lands", "utility-lands": "Lands",
-    "tutors": "Tutors", "tutor": "Tutors",
-    "combo": "Win Conditions", "winconditions": "Win Conditions", "win-conditions": "Win Conditions", "finishers": "Win Conditions",
-    "highsynergycards": "High Synergy", "high-synergy-cards": "High Synergy", "highsynergy": "High Synergy",
-    "newcards": "New Cards", "new-cards": "New Cards",
-    "creatures": "Creatures", "enchantments": "Enchantments", "artifacts": "Artifacts",
-    "instants": "Instants", "sorceries": "Sorceries", "planeswalkers": "Planeswalkers",
-    "graveyard": "Graveyard", "selfmill": "Self-Mill", "discard": "Discard",
-    "sacrifice": "Sacrifice", "lifegain": "Lifegain", "tribal": "Tribal",
-    "tokens": "Token Generators", "voltron": "Voltron", "stax": "Stax",
-}
-
-SKIP_TAGS = {
-    "topcommanders", "newcommanders", "similarcommanders",
-    "partners", "companions", "signaturecard",
-    "tagsbypopularitysort", "coloridentity",
-}
 
 COLOR_BASICS = {
     "W": "Plains", "U": "Island", "B": "Swamp", "R": "Mountain", "G": "Forest",
@@ -134,122 +62,9 @@ UNIVERSAL_LANDS = ["Command Tower"]
 
 # ─── EDHREC fetch ─────────────────────────────────────────────────────────────
 
-def slugify(name):
-    slug = name.lower()
-    slug = re.sub(r"[''',.]", "", slug)
-    slug = re.sub(r"[^a-z0-9]+", "-", slug)
-    return slug.strip("-")
-
-
-def fetch_commander_page(slug):
-    time.sleep(0.2)
-    url = f"{EDHREC_BASE}/commanders/{slug}"
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(req) as resp:
-            html = resp.read().decode("utf-8")
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            raise ValueError(
-                f"Commander '{slug}' not found on EDHREC.\n"
-                f"  Try the exact EDHREC slug (e.g. 'araumi-of-the-dead-tide')."
-            )
-        raise
-    match = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-    if not match:
-        raise ValueError(f"No NEXT_DATA found for '{slug}'")
-    return json.loads(match.group(1))["props"]["pageProps"]["data"]
-
-
-def extract_card(cardview):
-    prices = cardview.get("prices", {}) or {}
-    return {
-        "name": cardview.get("name", ""),
-        "deck_count": cardview.get("num_decks", 0),
-        "inclusion_rate": cardview.get("inclusion", 0),
-        "synergy_score": cardview.get("synergy", 0),
-        "price_usd": prices.get("usd"),
-        "cmc": cardview.get("cmc"),
-        "type": cardview.get("primary_type", ""),
-    }
-
-
-def fetch_staples(slug):
-    """Fetch and categorize EDHREC card recommendations. Returns (categorized, color_identity)."""
-    data = fetch_commander_page(slug)
-    cardlists = (
-        data.get("container", {}).get("json_dict", {}).get("cardlists", [])
-        or data.get("cardlists", [])
-    )
-
-    color_identity = []
-    try:
-        color_identity = data.get("card", {}).get("color_identity", [])
-    except Exception:
-        pass
-
-    categorized = {}
-    for cl in cardlists:
-        tag = cl.get("tag", "").lower()
-        if tag in SKIP_TAGS:
-            continue
-
-        cards = [extract_card(c) for c in cl.get("cardviews", []) if c.get("name")]
-        if not cards:
-            continue
-
-        category = CATEGORY_MAP.get(tag)
-        if not category:
-            for key, val in CATEGORY_MAP.items():
-                if key in tag or tag in key:
-                    category = val
-                    break
-        if not category:
-            header = cl.get("header", "")
-            category = header if header else tag.replace("-", " ").title()
-
-        if category not in categorized:
-            categorized[category] = []
-        existing = {c["name"] for c in categorized[category]}
-        for card in cards:
-            if card["name"] not in existing:
-                categorized[category].append(card)
-                existing.add(card["name"])
-
-    return categorized, color_identity
-
-
-# ─── Scryfall ─────────────────────────────────────────────────────────────────
-
-def fetch_cards_batch(names):
-    """Batch-fetch prices from Scryfall /cards/collection (75 per request)."""
-    found = {}
-    names_list = list(names)
-    for i in range(0, len(names_list), 75):
-        chunk = names_list[i:i + 75]
-        payload = json.dumps({"identifiers": [{"name": n} for n in chunk]}).encode("utf-8")
-        time.sleep(0.1)
-        req = urllib.request.Request(
-            f"{SCRYFALL_BASE}/cards/collection",
-            data=payload,
-            headers={"User-Agent": USER_AGENT, "Accept": "application/json", "Content-Type": "application/json"},
-        )
-        with urllib.request.urlopen(req) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        for card in data.get("data", []):
-            price_str = card.get("prices", {}).get("usd")
-            found[card["name"].lower()] = float(price_str) if price_str else None
-    return found
-
-
-def fetch_commander_scryfall(name):
-    """Fetch commander data from Scryfall for color identity fallback."""
-    encoded = urllib.parse.urlencode({"fuzzy": name}, quote_via=urllib.parse.quote)
-    url = f"{SCRYFALL_BASE}/cards/named?{encoded}"
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
-    time.sleep(0.1)
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+def fetch_staples(name, strategies=(), partner=None):
+    pool, commander, source = commander_pool(name, warn=lambda m: print(m, file=sys.stderr), strategies=strategies, partner=partner)
+    return pool, commander, source
 
 
 def fetch_art_cards_for_theme(art_keywords, color_identity, budget=None):
@@ -258,9 +73,8 @@ def fetch_art_cards_for_theme(art_keywords, color_identity, budget=None):
     Uses Scryfall's art: illustration tag search. Returns list of card name strings.
     """
     parts = [f"art:{kw}" for kw in art_keywords]
-    if color_identity:
-        parts.append(f"id<=({''.join(color_identity).upper()})")
-    parts.append("-type:basic")
+    parts.append("id<=" + ("".join(color_identity).lower() or "c"))
+    parts.append("-type:basic legal:commander")
     query = " ".join(parts)
 
     encoded = urllib.parse.urlencode(
@@ -274,7 +88,7 @@ def fetch_art_cards_for_theme(art_keywords, color_identity, budget=None):
         time.sleep(0.1)
         req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
         try:
-            with urllib.request.urlopen(req) as resp:
+            with urllib.request.urlopen(req, timeout=20) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
             if e.code == 404:
@@ -299,30 +113,16 @@ def fetch_art_cards_for_theme(art_keywords, color_identity, budget=None):
     return cards
 
 
-def enrich_prices(categorized):
-    """Replace EDHREC prices with real Scryfall prices."""
-    all_names = [c["name"] for cats in categorized.values() for c in cats]
-    if not all_names:
-        return
-    print(f"  Enriching prices ({len(all_names)} cards)...", flush=True)
-    prices = fetch_cards_batch(all_names)
-    for cards in categorized.values():
-        for card in cards:
-            scryfall_price = prices.get(card["name"].lower())
-            if scryfall_price is not None:
-                card["price_usd"] = str(scryfall_price)
-
-
 # ─── Target calculation ───────────────────────────────────────────────────────
 
 def calculate_targets(bracket, engine, game_plan, win_con):
     """Calculate adjusted slot targets from bracket baseline + strategy overrides."""
-    targets = dict(BRACKET_TARGETS.get(bracket, BRACKET_TARGETS[3]))
+    baseline = BRACKET_BASELINES.get(bracket, BRACKET_BASELINES[3])
+    targets = {key: (value[0] + value[1]) // 2 for key, value in baseline.items() if key != 'note'}
     for slug in [engine, game_plan, win_con]:
-        adj = STRATEGY_ADJUSTMENTS.get(slug, {})
-        for key, delta in adj.items():
-            if key in targets:
-                targets[key] = max(0, targets[key] + delta)
+        for key, delta in STRATEGY_OVERRIDES.get(slug, {}).items():
+            if key.endswith('_adj') and key[:-4] in targets:
+                targets[key[:-4]] = max(0, targets[key[:-4]] + delta)
     # board_wipes is a subset of interaction
     targets["board_wipes"] = min(targets["board_wipes"], targets["interaction"])
     return targets
@@ -380,14 +180,7 @@ def build_deck(commander_name, targets, staples, color_identity, budget=None, ar
     instead of EDHREC — used for art-themed or flavor-themed decks.
     Returns (sections dict, used set).
     """
-    # Apply budget filter to all staples
-    if budget is not None:
-        staples = {
-            cat: [c for c in cards if is_affordable(c, budget)]
-            for cat, cards in staples.items()
-        }
-
-    used = set()
+    used = set(commander_name if isinstance(commander_name, list) else [commander_name])
     sections = {
         "Ramp":            [],
         "Card Draw":       [],
@@ -413,7 +206,7 @@ def build_deck(commander_name, targets, staples, color_identity, budget=None, ar
 
     # Interaction: board wipes first, then removal and counterspells
     fill_slot(sections, "Interaction",    used, staples, ["Board Wipes"],                             targets["board_wipes"])
-    remaining_interaction = targets["interaction"] - targets["board_wipes"]
+    remaining_interaction = targets["interaction"]
     fill_slot(sections, "Interaction",    used, staples, ["Removal", "Counterspells", "Protection"],  remaining_interaction)
 
     fill_slot(sections, "Tutors",         used, staples, ["Tutors"],                                  targets["tutors"])
@@ -421,7 +214,8 @@ def build_deck(commander_name, targets, staples, color_identity, budget=None, ar
 
     total_non_land = (targets["ramp"] + targets["card_draw"] + targets["interaction"] +
                       targets["tutors"] + targets["win_cons"])
-    theme_target = 99 - targets["lands"] - total_non_land
+    commander_count = len(commander_name) if isinstance(commander_name, list) else 1
+    theme_target = 100 - commander_count - targets["lands"] - total_non_land
 
     if art_cards:
         # Art theme mode: fill theme slots from art search results (sorted by CMC)
@@ -430,7 +224,7 @@ def build_deck(commander_name, targets, staples, color_identity, budget=None, ar
     else:
         # Standard mode: fill theme slots from EDHREC synergy categories
         theme_cats = [
-            "High Synergy", "Creatures", "Graveyard", "Self-Mill", "Enchantments",
+            "Theme Candidates", "High Synergy", "Creatures", "Graveyard", "Self-Mill", "Enchantments",
             "Artifacts", "Instants", "Sorceries", "Sacrifice", "Discard",
             "Token Generators", "New Cards", "Tribal", "Voltron", "Planeswalkers",
         ]
@@ -465,14 +259,44 @@ def build_basics(sections, targets, color_identity):
     return basics
 
 
+def apply_total_budget(sections, basics, commanders, targets, identity, staples, budget):
+    """Keep the chosen total optional and fill cheaper alternatives within it."""
+    desired = {section: len(names) for section, names in sections.items()}
+    basic_names = [COLOR_BASICS[c] for c in identity if c in COLOR_BASICS] or ['Wastes']
+    names = commanders + basic_names + [n for cards in sections.values() for n in cards]
+    prices = {c['name']: cents(c.get('price_usd')) for cards in staples.values() for c in cards}
+    prices.update(price_cards(names))
+    ceiling = cents(budget)
+    # A player's budget determines when costly utility lands should become basics.
+    per_slot = max(0, (ceiling - sum(prices.get(n) or 0 for n in commanders)) // max(1, 100 - len(commanders)))
+    sections = {key: list(value) for key, value in sections.items()}
+    sections['Utility Lands'] = [n for n in sections['Utility Lands'] if prices.get(n) is not None and prices[n] <= per_slot]
+    basics = build_basics(sections, targets, identity)
+    sections, report = constrain_deck(sections, basics, commanders, budget, prices)
+    spent = int(round(report['estimated_total_usd'] * 100))
+    used = set(commanders) | {n for cards in sections.values() for n in cards}
+    categories = {'Ramp': ['Ramp'], 'Card Draw': ['Card Draw'], 'Interaction': ['Board Wipes', 'Removal', 'Counterspells', 'Protection'], 'Tutors': ['Tutors'], 'Win Conditions': ['Win Conditions'], 'Theme / Synergy': ['Theme Candidates', 'High Synergy']}
+    for section, cats in categories.items():
+        candidates = {card['name']: card for cat in cats for card in staples.get(cat, [])}
+        for name in sorted(candidates, key=lambda n: (prices.get(n) is None, prices.get(n) or 0, n)):
+            if len(sections[section]) >= desired[section]:
+                break
+            amount = prices.get(name)
+            if name not in used and amount is not None and spent + amount <= ceiling:
+                sections[section].append(name); used.add(name); spent += amount
+    report['estimated_total_usd'] = spent / 100
+    report['unfilled_slots'] = 100 - len(commanders) - sum(basics.values()) - sum(map(len, sections.values()))
+    return sections, basics, report
+
+
 # ─── Output ───────────────────────────────────────────────────────────────────
 
-def format_decklist(commander_name, sections, basics, targets, budget, total_cards, art_theme=None):
+def format_decklist(commander_name, sections, basics, targets, budget, total_cards, art_theme=None, commanders=None):
     today = datetime.date.today().isoformat()
     lines = []
     lines.append(f"# {commander_name} — Commander")
     lines.append(f"# Theme: [fill in from brief]")
-    lines.append(f"# Bracket: {targets.get('_bracket', '?')} | Avg CMC: TBD | Budget: ${budget or '?'}")
+    lines.append(f"# Bracket: {targets.get('_bracket', '?')} | Avg CMC: TBD | Budget: {'No limit' if budget is None else '$' + str(budget)}")
     lines.append(f"# Date: {today}")
     if art_theme:
         lines.append(f"# ART THEME: {art_theme} — theme slots filled by art search, not EDHREC synergy")
@@ -480,7 +304,8 @@ def format_decklist(commander_name, sections, basics, targets, budget, total_car
     lines.append("")
 
     lines.append("Commander:")
-    lines.append(f"1 {commander_name}")
+    for name in commanders or [commander_name]:
+        lines.append(f"1 {name}")
     lines.append("")
 
     utility = sections["Utility Lands"]
@@ -503,7 +328,7 @@ def format_decklist(commander_name, sections, basics, targets, budget, total_car
             lines.append("")
 
     lines.append("")
-    lines.append("## Validation Summary")
+    lines.append("## Draft Coverage (not legality validation)")
     lines.append(f"- Total: {total_cards}/100")
     lines.append(f"- Lands: {land_total} (target: {targets['lands']})")
     lines.append(f"- Ramp: {len(sections['Ramp'])} (target: {targets['ramp']})")
@@ -512,16 +337,18 @@ def format_decklist(commander_name, sections, basics, targets, budget, total_car
     lines.append(f"- Tutors: {len(sections['Tutors'])} (target: {targets['tutors']})")
     lines.append(f"- Win Conditions: {len(sections['Win Conditions'])} (target: {targets['win_cons']})")
     lines.append(f"- Theme/Synergy: {len(sections['Theme / Synergy'])}")
-    if budget:
-        lines.append(f"- Budget filter: ${budget:.0f}")
+    if budget is not None:
+        lines.append(f"- Player-supplied total-deck budget: ${budget:.2f}")
+    else:
+        lines.append("- Budget: no limit specified by player")
     if total_cards < 100:
-        lines.append(f"- ⚠ {100 - total_cards} slots unfilled — EDHREC pool thin for this commander. Fill manually.")
+        lines.append(f"- ⚠ {100 - total_cards} slots unfilled — Provisional pool leaves gaps. Fill verified strategy packages manually.")
 
     lines.append("")
     lines.append("## AI Review Checklist")
     if art_theme:
         lines.append(f"- [ ] ART THEME MODE: theme slots filled by art:{art_theme} search — review for flavor fit")
-        lines.append("- [ ] Structural slots (ramp/draw/interaction) still came from EDHREC — review those normally")
+        lines.append("- [ ] Structural slots use the verified provider pool — review roles and provenance")
         lines.append("- [ ] Replace any art-theme cards that are mechanically dead weight with better options")
     lines.append("- [ ] Slot non-negotiables from brief (replace weakest theme cards)")
     lines.append("- [ ] Verify win conditions match the planned combo line")
@@ -539,6 +366,7 @@ def main():
         description="Auto-generate a Commander deck draft from EDHREC staples + Scryfall prices."
     )
     parser.add_argument("--commander", required=True, help="Commander name")
+    parser.add_argument("--partner", default=None, help="Second commander: supported Partner/Friends forever/Background pairing")
     parser.add_argument("--bracket", type=int, required=True, choices=[1, 2, 3, 4, 5])
     parser.add_argument("--engine", required=True,
                         help="Engine slug: graveyard, aristocrats, artifacts, enchantress, etc.")
@@ -547,41 +375,42 @@ def main():
     parser.add_argument("--win-con", required=True, dest="win_con",
                         help="Win con slug: life-depletion, mill, poison, commander-damage, etc.")
     parser.add_argument("--budget", type=float, default=None,
-                        help="Max total budget in USD — cards over this price are filtered out")
+                        help="Optional total deck budget in USD, including commanders and lands; omit for no limit")
     parser.add_argument("--art-theme", metavar="KEYWORDS", default=None, dest="art_theme",
                         help="Space-separated art keywords (e.g. 'smile balloon party'). "
-                             "Theme slots filled by Scryfall art search instead of EDHREC synergy.")
+                             "Theme slots filled by Scryfall art search instead of the standard strategy pool.")
     parser.add_argument("--output", metavar="PATH", default=None,
                         help="Write draft to this file path")
+    parser.add_argument("--force", action="store_true", help="Explicitly allow replacing an existing output file")
     parser.add_argument("--print", action="store_true", dest="print_list",
                         help="Print to stdout instead of writing to file")
     args = parser.parse_args()
 
+    if args.output and os.path.exists(args.output) and not args.force:
+        parser.error("Output already exists. Keep the approved brief; choose a new path or explicitly use --force.")
+
+    if args.budget is not None and cents(args.budget) is None:
+        parser.error("Budget must be finite and nonnegative; omit --budget for no limit.")
+    rules = current_rules()
     slug = slugify(args.commander)
 
     print(f"Fetching EDHREC staples for '{slug}'...")
-    staples, color_identity = fetch_staples(slug)
-
-    if not color_identity:
-        print("  Fetching color identity from Scryfall...")
-        try:
-            card = fetch_commander_scryfall(args.commander)
-            color_identity = card.get("color_identity", [])
-        except Exception as e:
-            print(f"  Could not fetch color identity: {e}")
+    staples, commander, source = fetch_staples(args.commander, strategies=(args.engine, args.game_plan, args.win_con), partner=args.partner)
+    commander_names = [c["name"] for c in commander["commanders"]]
+    args.commander = commander["name"]
+    color_identity = commander["color_identity"]
 
     print(f"  Color identity: {''.join(color_identity) or 'Colorless'}")
     cat_summary = ", ".join(f"{k}({len(v)})" for k, v in staples.items())
     print(f"  Categories: {cat_summary}")
 
-    enrich_prices(staples)
 
     # Art theme: fetch art cards before building (if requested)
     art_cards = None
     if args.art_theme:
         art_keywords = args.art_theme.strip().split()
         print(f"\nArt theme mode: fetching cards with art:{' art:'.join(art_keywords)}...")
-        art_cards = fetch_art_cards_for_theme(art_keywords, color_identity, budget=args.budget)
+        art_cards = fetch_art_cards_for_theme(art_keywords, color_identity)
         if not art_cards:
             print("  ⚠ No art cards found — falling back to EDHREC theme selection.")
             art_cards = None
@@ -596,20 +425,28 @@ def main():
 
     print("\nAuto-selecting cards...")
     sections, used = build_deck(
-        args.commander, targets, staples, color_identity,
-        budget=args.budget, art_cards=art_cards,
+        commander_names, targets, staples, color_identity,
+        art_cards=art_cards,
     )
     basics = build_basics(sections, targets, color_identity)
 
-    total_cards = 1  # commander
+    budget_report = {"status": "unrestricted", "limit_usd": None}
+    if args.budget is not None:
+        sections, basics, budget_report = apply_total_budget(sections, basics, commander_names, targets, color_identity, staples, args.budget)
+
+    total_cards = len(commander_names)
     total_cards += sum(basics.values())
     for section in sections.values():
         total_cards += len(section)
 
     decklist = format_decklist(
         args.commander, sections, basics, targets, args.budget, total_cards,
-        art_theme=args.art_theme,
+        art_theme=args.art_theme, commanders=commander_names,
     )
+
+    decklist += f"\n\n## Data provenance\n- Source: {source}\n- Role assignment: Scryfall oracle-text heuristics; human review required.\n- Bracket and strategy require separate review. Rules checked: {rules['checked_at']}.\n"
+
+    decklist += "\n\n## Player budget\n```json\n" + json.dumps(budget_report, indent=2) + "\n```\n"
 
     if args.print_list:
         print("\n" + decklist)
@@ -619,7 +456,7 @@ def main():
         out_dir = os.path.dirname(args.output)
         if out_dir:
             os.makedirs(out_dir, exist_ok=True)
-        with open(args.output, "w", encoding="utf-8") as f:
+        with open(args.output, "w" if args.force else "x", encoding="utf-8") as f:
             f.write(decklist)
         print(f"\nDraft written to: {args.output}")
     else:
@@ -627,10 +464,14 @@ def main():
 
     print(f"\n{total_cards}/100 cards generated.")
     if total_cards < 100:
-        print(f"  ⚠ {100 - total_cards} slots unfilled — EDHREC pool may be thin for this commander.")
+        print(f"  ⚠ {100 - total_cards} slots unfilled — Provisional pool leaves strategy gaps; fill verified packages manually.")
         print(f"    AI will fill remaining slots manually during review.")
     print(f"  Next: AI reviews draft, slots non-negotiables, then runs validate-deck.py.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (urllib.error.URLError, TimeoutError, ValueError) as error:
+        print(f"Data source error: {error}. Check connections; do not infer commander age.", file=sys.stderr)
+        sys.exit(1)

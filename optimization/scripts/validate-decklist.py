@@ -55,7 +55,7 @@ def scryfall_get(url):
     """Make a GET request to Scryfall."""
     time.sleep(0.1)
     req = urllib.request.Request(url, headers={"User-Agent": "MTGDeckBuilder/1.0"})
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
@@ -92,6 +92,8 @@ def parse_decklist(filepath):
     with open(filepath, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
+            if line.startswith("## "):
+                break
             if not line or line.startswith("//"):
                 continue
 
@@ -108,6 +110,12 @@ def parse_decklist(filepath):
                 continue
             elif line.startswith("#"):
                 continue
+
+            if line.endswith(":"):
+                section = "main"
+                continue
+            if line.startswith("##"):
+                break
 
             # Parse "4 Card Name" or "4x Card Name" or "Card Name"
             match = re.match(r"^(\d+)[xX]?\s+(.+)$", line)
@@ -151,7 +159,7 @@ def validate(filepath, fmt, skip_legality=False):
         if total != 100:
             errors.append(f"Commander decks must be exactly 100 cards (including commander). Found: {total}")
         if not commander:
-            warnings.append("No commander detected. Add a 'Commander:' section to your decklist.")
+            errors.append("No commander detected. Add a 'Commander:' section to your decklist.")
     elif fmt == "oathbreaker":
         if total_main != 58:
             errors.append(f"Oathbreaker decks must be 60 cards total (58 main + oathbreaker + signature spell). Found main: {total_main}")
@@ -179,14 +187,14 @@ def validate(filepath, fmt, skip_legality=False):
         if commander:
             all_cards.add(commander)
 
-        commander_color_identity = set()
+        commander_color_identity = None
         if commander and rules["commander"]:
             card_data = fetch_card(commander)
             if card_data:
                 commander_color_identity = set(card_data.get("color_identity", []))
                 print(f"  Commander color identity: {'{' + '}{'.join(sorted(commander_color_identity)) + '}' if commander_color_identity else 'Colorless'}")
             else:
-                warnings.append(f"Could not verify commander '{commander}' via Scryfall.")
+                errors.append(f"Could not verify commander '{commander}' via Scryfall.")
 
         for card_name in sorted(all_cards):
             card_data = fetch_card(card_name)
@@ -202,7 +210,7 @@ def validate(filepath, fmt, skip_legality=False):
                     errors.append(f"'{card_name}': RESTRICTED in {fmt} (max 1 copy)")
                 else:
                     warnings.append(f"'{card_name}': Restricted in {fmt} (1-of limit — you have 1, OK)")
-            elif legality not in ("legal", "unknown"):
+            elif legality != "legal":
                 errors.append(f"'{card_name}': Not legal in {fmt} (status: {legality})")
 
             # Commander color identity check

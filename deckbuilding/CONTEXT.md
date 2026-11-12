@@ -1,5 +1,12 @@
 # Deckbuilding Workspace
 
+## Workflow contract
+- **Inputs:** Approved `brews/[slug]-draft.md`; `skills/brew-commander.md`; `_shared/data-sources.md` at repository root.
+- **Process:** Generate a separate draft, review cards against the brief, fill gaps with verified searches, then validate.
+- **Outputs:** `brews/[slug]-generated.md` → `brews/[slug]-review.md`. Preserve the approved brief.
+- **Human check:** Review missing slots, provenance, total budget, bracket and win conditions before optimization. Do not assume automatic coverage or validation.
+
+
 ## What This Workspace Is
 
 Where concepts become decklists. Input is either a brew starter file created by Ideation (containing the approved brief header) or a direct commander/format idea. The agent researches, structures, and drafts a complete, coherent deck. Output goes to `brews/` and eventually `decklists/`, feeding into the optimization pipeline.
@@ -76,7 +83,7 @@ A brew becomes `review` when every slot is filled. It becomes `final` when the m
 |-------------|-------------|-----|
 | `skills/brew-commander.md` | **Commander decks only.** Activates the structured EDH brew workflow. | Provide commander name and theme. Skill guides through engine → synergy → utility → mana base. |
 | `skills/card-search.md` | **Finding cards not in the staples pool.** Use inline when a specific card type isn't covered by EDHREC data. | Describe the need in plain language; skill translates to Scryfall query. |
-| `scripts/generate-starter-deck.py` | **Phase 0 — run first.** Auto-fills ~85-95% of the deck from EDHREC staples by synergy score. Add `--art-theme "keywords"` for art/flavor themed decks — theme slots filled by Scryfall art search instead of EDHREC. | `python deckbuilding/scripts/generate-starter-deck.py --commander "Name" --bracket 3 --engine graveyard --game-plan combo --win-con life-depletion --budget 200 --output deckbuilding/brews/slug-draft.md` |
+| `scripts/generate-starter-deck.py` | **Phase 0 — run first.** Builds a provisional draft from EDHREC + Scryfall, with a labelled Scryfall fallback. Coverage varies; win conditions need review. Add `--art-theme "keywords"` for art/flavor themed decks — theme slots filled by Scryfall art search instead of EDHREC. | `python deckbuilding/scripts/generate-starter-deck.py --commander "Name" --bracket 3 --engine graveyard --game-plan combo --win-con life-depletion --budget 200 --output deckbuilding/brews/slug-generated.md` |
 | `scripts/fetch-art-cards.py` | **Art/flavor themed decks.** Searches Scryfall illustration tags to build an art-themed card pool. Run this first to explore which keywords return good results before passing `--art-theme` to generate-starter-deck. | `python deckbuilding/scripts/fetch-art-cards.py --art "smile balloon" --color-identity WR --budget 5` |
 | `scripts/fetch-commander-staples.py` | **Phase 0 — reference pool.** Shows full EDHREC card pool by category for review during Phase 5. | `python deckbuilding/scripts/fetch-commander-staples.py "Commander Name"` |
 | `scripts/fetch-reference-lists.py` | **Phase 0 — run first.** Fetches top reference decklists from Moxfield + Archidekt. | `python deckbuilding/scripts/fetch-reference-lists.py "Commander Name" --top 3` |
@@ -122,7 +129,7 @@ Sideboard (if applicable):
 ## What NOT to Do
 
 - **Don't skip `docs/formats.md`** when legality matters — putting a banned card in a brew wastes the whole session
-- **Don't over-fill** — a 75-card Commander list needs brutal cutting to reach 100; start tight
+- **Don't over-fill** — a list over 100 cards needs cutting to reach 100; start tight
 - **Don't solve the mana base here** — that's `optimization/`'s job. Rough in basics and a skeleton of non-basics, then hand off
 - **Don't load optimization docs** during the brew phase — you're generating cards, not analyzing them yet
 - **Don't create files outside this workspace** — when ready for optimization, copy the brew to `optimization/sessions/`
