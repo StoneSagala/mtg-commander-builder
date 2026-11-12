@@ -1,0 +1,59 @@
+test_batch_deduplication_and_limit (test_data_sources.DataSourceTests) ... ok
+test_edhrec_404_and_outage_use_labelled_legal_fallback (test_data_sources.DataSourceTests) ... ok
+test_empty_edhrec_pool_uses_fallback (test_data_sources.DataSourceTests) ... ok
+test_inclusion_derived_from_counts (test_data_sources.DataSourceTests) ... ok
+test_json_feed_replaces_page_html (test_data_sources.DataSourceTests) ... ok
+test_nonlegal_and_off_color_cards_removed (test_data_sources.DataSourceTests) ... ok
+test_roles_avoid_treasure_reminder_false_positive (test_data_sources.DataSourceTests) ... ok
+test_schema_drift_is_not_absence (test_data_sources.DataSourceTests) ... ok
+test_scryfall_failure_does_not_assume_colorless (test_data_sources.DataSourceTests) ... ok
+test_timeout_and_retry_429 (test_data_sources.DataSourceTests) ... ok
+test_budget_unknown_is_not_pass (test_data_sources.ValidationRegressionTests) ... ok
+test_moxfield_v3_uses_names_in_nested_boards (test_data_sources.ValidationRegressionTests) ... ok
+test_optimizer_parser_accepts_generated_sections (test_data_sources.ValidationRegressionTests) ... ok
+test_text_report_fails_unresolved_cards (test_data_sources.ValidationRegressionTests) ... ok
+test_tutors_header_ends_commander_section (test_data_sources.ValidationRegressionTests) ... ok
+test_unreleased_commander_rejected (test_data_sources.ValidationRegressionTests) ... ok
+test_archidekt_search_contract (test_data_sources.WorkflowTests) ... ok
+test_generator_refuses_existing_brief_before_network (test_data_sources.WorkflowTests) ... ok
+test_interaction_target_includes_wipes_once (test_data_sources.WorkflowTests) ... ok
+test_optional_moxfield_timeout_does_not_block_archidekt (test_data_sources.WorkflowTests) ... ok
+test_spellbook_endpoint (test_data_sources.WorkflowTests) ... ok
+test_cheaper_alternatives_refill_budget_gaps (test_reliability.BudgetTests) ... ok
+test_effect_screen_uses_fresh_text_not_old_card_name_lists (test_reliability.BudgetTests) ... ok
+test_impossible_budget_fails (test_reliability.BudgetTests) ... ok
+test_invalid_values_not_unlimited (test_reliability.BudgetTests) ... ok
+test_no_budget_means_no_price_requirement (test_reliability.BudgetTests) ... ok
+test_partner_costs_both_count (test_reliability.BudgetTests) ... ok
+test_total_includes_commander_and_each_basic_copy (test_reliability.BudgetTests) ... ok
+test_unknown_spell_omitted_for_a_bounded_build (test_reliability.BudgetTests) ... ok
+test_unpriced_base_cannot_claim_within_budget (test_reliability.BudgetTests) ... ok
+test_validator_exact_budget_uses_integer_cents (test_reliability.BudgetTests) ... ok
+test_combo_legality_uses_current_schema (test_reliability.ComboTests) ... ok
+test_pagination_collects_all_included_not_almost (test_reliability.ComboTests) ... ok
+test_parse_deck_keeps_commanders_and_quantities (test_reliability.ComboTests) ... ok
+test_partial_network_failure_keeps_confirmed_variants (test_reliability.ComboTests) ... ok
+test_request_cap_reports_incomplete (test_reliability.ComboTests) ... ok
+test_broken_source_does_not_replace_last_good_snapshot (test_reliability.FreshnessTests) ... ok
+test_expired_refresh_failure_cannot_reuse_old_data (test_reliability.FreshnessTests) ... ok
+test_expiry_boundary_and_future_times (test_reliability.FreshnessTests) ... ok
+test_missing_official_color_section_detected (test_reliability.FreshnessTests) ... ok
+test_new_rules_hash_requires_review_even_when_recent (test_reliability.FreshnessTests) ... ok
+test_popularity_cache_expiry (test_reliability.FreshnessTests) ... ok
+test_first_redraw_is_free_seven (test_reliability.MulliganTests) ... ok
+test_free_mulligan_and_bottom_conserve_cards (test_reliability.MulliganTests) ... ok
+test_seeded_mixed_deck_is_reproducible (test_reliability.MulliganTests) ... ok
+test_seeded_simulation_repeats_and_all_land_deck_has_four_lands_on_t4 (test_reliability.MulliganTests) ... ok
+test_arbitrary_two_legends_not_a_legal_pair (test_reliability.PartnerTests) ... ok
+test_choose_background_pair (test_reliability.PartnerTests) ... ok
+test_partner_union (test_reliability.PartnerTests) ... ok
+test_two_commanders_change_deck_slot_count (test_reliability.PartnerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 0.202s
+
+OK
+  Moxfield: searching for 'Kotis'...
+    Moxfield unavailable: offline
+  Archidekt: searching for 'Kotis'...
+    Found 0 Archidekt list(s).

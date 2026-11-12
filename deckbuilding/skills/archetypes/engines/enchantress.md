@@ -35,11 +35,11 @@ Sythis, Harvest's Hand · Enchantress's Presence · Eidolon of Blossoms · Setes
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Enchantress as draw engine + aura-based threats; Ancestral Mask, Rancor
-- **Bracket 3:** Sphere of Safety as pillow fort; Sterling Grove as protection
-- **Brackets 4–5:** Stax enchantments (Stasis, Humility, Rest in Peace); Enchanted Evening for mass enchantment synergy
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

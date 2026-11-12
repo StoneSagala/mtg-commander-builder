@@ -1,5 +1,12 @@
 # Ideation Workspace
 
+## Workflow contract
+- **Inputs:** Player request; `skills/ideate.md`; `docs/playstyles.md` and `docs/brackets.md` only as needed. Shared provider handling: `../_shared/data-sources.md`.
+- **Process:** Capture commander, verified color identity, strategy, bracket, constraints and total budget using `../_templates/brew-brief.md`.
+- **Outputs:** `../deckbuilding/brews/[slug]-draft.md`, copied from the brief template.
+- **Human check:** Player approves the written brief before deckbuilding. Cache misses are not proof of commander absence.
+
+
 ## What This Workspace Is
 
 Where new Commander decks are born. A consultant-style intake conversation that helps a player discover what they want to build — their commander, playstyle, win condition, and power level. Output is a build brief that feeds directly into deckbuilding.

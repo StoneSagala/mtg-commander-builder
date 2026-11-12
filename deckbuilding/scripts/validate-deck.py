@@ -15,9 +15,8 @@ Checks:
 
   Bracket Compliance (based on official WotC bracket system):
     - Game Changer count vs bracket cap
-    - Extra turn cards (banned at bracket 1, flagged at 2-3)
-    - Mass land denial (banned at brackets 1-3)
-    - Early infinite combos (banned at brackets 1-2, late-game only at 3)
+    - Live oracle-text extra-turn / land-denial screening for player review
+    - Combo completeness and timing need the separate Spellbook check and strategy review
 
   House Rules:
     - Cross-references the brief's exclude list and house rules against the deck
@@ -38,14 +37,16 @@ import urllib.request
 import urllib.parse
 import urllib.error
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_shared"))
+from freshness import current_rules
+from data_sources import commander_group
+from deck_budget import price_cards, cents
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
 SCRYFALL_BASE = "https://api.scryfall.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-
-GAME_CHANGERS_FILE = Path(__file__).parent.parent / "docs" / "game-changers.md"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 BASIC_LANDS = {
     "Plains", "Island", "Swamp", "Mountain", "Forest", "Wastes",
@@ -53,100 +54,10 @@ BASIC_LANDS = {
     "Snow-Covered Mountain", "Snow-Covered Forest",
 }
 
-# Extra turn cards — banned at bracket 1, flagged (low quantity only) at brackets 2-3
-EXTRA_TURN_CARDS = {
-    "Time Warp", "Temporal Manipulation", "Capture of Jingzhou",
-    "Temporal Trespass", "Part the Waterveil", "Walk the Aeons",
-    "Expropriate", "Beacon of Tomorrows", "Nexus of Fate",
-    "Alrund's Epiphany", "Savor the Moment", "Karn's Temporal Sundering",
-    "Magistrate's Scepter", "Second Chance", "Warrior's Oath",
-    "Notorious Throng", "Meander", "Emrakul, the Promised End",
-    "Seedtime", "Stitch in Time", "Time Stretch", "Time Spiral",
-    "Teferi, Master of Time", "Wandering Archaic",
-}
-
-# Mass land denial — not allowed at brackets 1-3
-MASS_LAND_DENIAL = {
-    "Armageddon", "Ravages of War", "Apocalypse", "Jokulhaups",
-    "Obliterate", "Decree of Annihilation", "Sunder",
-    "Keldon Firebombers", "Catastrophe", "Cataclysm",
-    "Impending Disaster", "Burning Sands", "Winter Orb",
-    "Static Orb", "Stasis", "Land Equilibrium",
-    "Numot, the Devastator", "Plow Under", "Hokori, Dust Drinker",
-    "Ruination", "Mana Vortex", "Blood Moon", "Magus of the Moon",
-    "Back to Basics",
-}
-
-# Bracket rules summary
-BRACKET_RULES = {
-    1: {
-        "game_changers_max": 0,
-        "extra_turns": "none",       # not allowed
-        "mass_land_denial": False,
-        "early_combos": False,
-        "late_combos": False,
-    },
-    2: {
-        "game_changers_max": 0,
-        "extra_turns": "low",        # low quantities, not chained
-        "mass_land_denial": False,
-        "early_combos": False,
-        "late_combos": False,
-    },
-    3: {
-        "game_changers_max": 3,
-        "extra_turns": "low",
-        "mass_land_denial": False,
-        "early_combos": False,
-        "late_combos": True,         # late-game combos OK
-    },
-    4: {
-        "game_changers_max": None,   # no limit
-        "extra_turns": "any",
-        "mass_land_denial": True,
-        "early_combos": True,
-        "late_combos": True,
-    },
-    5: {
-        "game_changers_max": None,
-        "extra_turns": "any",
-        "mass_land_denial": True,
-        "early_combos": True,
-        "late_combos": True,
-    },
-}
-
-
 # ── Game changers ─────────────────────────────────────────────────────────────
 
 def load_game_changers():
-    """Parse game-changers.md and return a set of card names."""
-    if not GAME_CHANGERS_FILE.exists():
-        # Fallback hardcoded list if doc is missing
-        return {
-            "Drannith Magistrate", "Enlightened Tutor", "Humility", "Serra's Sanctum",
-            "Smothering Tithe", "Teferi's Protection", "Consecrated Sphinx", "Cyclonic Rift",
-            "Expropriate", "Fierce Guardianship", "Force of Will", "Intuition",
-            "Jin-Gitaxias, Core Augur", "Mystical Tutor", "Narset, Parter of Veils",
-            "Rhystic Study", "Thassa's Oracle", "Urza, Lord High Artificer",
-            "Ad Nauseam", "Bolas's Citadel", "Demonic Tutor", "Imperial Seal",
-            "Necropotence", "Opposition Agent", "Orcish Bowmasters", "Tergrid, God of Fright",
-            "Vampiric Tutor", "Deflecting Swat", "Gamble", "Jeska's Will", "Underworld Breach",
-            "Crop Rotation", "Food Chain", "Gaea's Cradle", "Natural Order",
-            "Seedborn Muse", "Survival of the Fittest", "Vorinclex, Voice of Hunger",
-            "Worldly Tutor", "Aura Shards", "Grand Arbiter Augustin IV", "Kinnan, Bonder Prodigy",
-            "Notion Thief", "Winota, Joiner of Forces", "Yuriko, the Tiger's Shadow",
-            "Chrome Mox", "Grim Monolith", "Lion's Eye Diamond", "Mana Vault",
-            "Mox Diamond", "The One Ring", "Ancient Tomb", "Glacial Chasm",
-            "Mishra's Workshop", "The Tabernacle at Pendrell Vale",
-        }
-    names = set()
-    with open(GAME_CHANGERS_FILE, encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("- "):
-                names.add(line[2:].strip())
-    return names
+    return {name for names in current_rules()['game_changers'].values() for name in names}
 
 
 # ── Scryfall ──────────────────────────────────────────────────────────────────
@@ -157,7 +68,7 @@ def scryfall_get(url):
         url,
         headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
     )
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
@@ -196,7 +107,7 @@ def fetch_cards_batch(names):
                 "Content-Type": "application/json",
             },
         )
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         for card in data.get("data", []):
             found[card["name"].lower()] = card
@@ -234,7 +145,7 @@ def parse_decklist(filepath):
         if re.match(r"^Commander\s*:", stripped, re.IGNORECASE):
             in_commander_section = True
             continue
-        if re.match(r"^(Lands|Creatures|Spells|Ramp|Card Draw|Utility|Win|Theme|Theft|Synergy|Interaction|Protection)\b", stripped, re.IGNORECASE):
+        if stripped.endswith(":") and not stripped[0].isdigit():
             in_commander_section = False
 
         # Parse "1 Card Name" or "1x Card Name" — skip commander section entry
@@ -253,7 +164,7 @@ def parse_decklist(filepath):
 # ── Validation checks ─────────────────────────────────────────────────────────
 
 def check_card_count(commander, cards):
-    total = len(cards) + (1 if commander else 0)
+    total = len(cards) + (len(commander) if isinstance(commander, list) else 1 if commander else 0)
     return {
         "pass": total == 100,
         "total": total,
@@ -279,15 +190,15 @@ def check_commander_legality(commander_card):
     oracle = commander_card.get("oracle_text", "")
     legalities = commander_card.get("legalities", {})
 
-    is_banned = legalities.get("commander") == "banned"
+    is_banned = legalities.get("commander") != "legal"
     is_legendary = "Legendary" in type_line
-    is_creature = "Creature" in type_line
+    is_creature = any(kind in type_line for kind in ("Creature", "Vehicle", "Spacecraft"))
     can_be_commander = "can be your commander" in oracle.lower()
     legal = not is_banned and (is_legendary and is_creature or can_be_commander)
 
     reasons = []
     if is_banned:
-        reasons.append("BANNED in Commander")
+        reasons.append("Not verified legal in Commander")
     if not (is_legendary and is_creature) and not can_be_commander:
         reasons.append("Not a legendary creature and no 'can be your commander' text")
 
@@ -318,10 +229,11 @@ def check_color_identity(commander_card, cards_data):
 
 def check_ban_list(cards_data):
     banned = []
+    named_bans = set(current_rules()["banned_cards"])
     for card in cards_data:
         if card.get("_not_found"):
             continue
-        if card.get("legalities", {}).get("commander") == "banned":
+        if card.get("legalities", {}).get("commander") != "legal" or card.get("name") in named_bans:
             banned.append(card["name"])
     return {
         "pass": len(banned) == 0,
@@ -333,8 +245,7 @@ def check_ban_list(cards_data):
 def check_game_changers(card_names, bracket):
     game_changers = load_game_changers()
     found = [n for n in card_names if n in game_changers]
-    rules = BRACKET_RULES[bracket]
-    cap = rules["game_changers_max"]
+    cap = current_rules()["brackets"][str(bracket)]["game_changers_max"]
 
     if cap is None:
         passed = True
@@ -356,48 +267,22 @@ def check_game_changers(card_names, bracket):
     }
 
 
-def check_extra_turns(card_names, bracket):
-    found = [n for n in card_names if n in EXTRA_TURN_CARDS]
-    rules = BRACKET_RULES[bracket]
-    policy = rules["extra_turns"]
-
-    if policy == "none":
-        passed = len(found) == 0
-        detail = f"No extra turn cards allowed at bracket {bracket}"
-        if found:
-            detail += f" — found: {', '.join(found)}"
-        else:
-            detail += " ✓"
-    elif policy == "low":
-        passed = len(found) <= 2  # "low quantity" — flag if more than 2
-        detail = f"{len(found)} extra turn card(s) — low quantity only at bracket {bracket}"
-        if passed:
-            detail += " ✓" if found else " (none) ✓"
-        else:
-            detail += f" — consider cutting to 1-2: {', '.join(found)}"
-    else:
-        passed = True
-        detail = f"{len(found)} extra turn card(s) — unrestricted at bracket {bracket} ✓"
-
-    return {"pass": passed, "found": found, "detail": detail}
+def effect_screen(cards_data, pattern, label, bracket):
+    found = []
+    for card in cards_data:
+        text = card.get('oracle_text', '') + ' ' + ' '.join(face.get('oracle_text', '') for face in card.get('card_faces', []))
+        if re.search(pattern, text, re.IGNORECASE):
+            found.append(card['name'])
+    return {"pass": not found or bracket >= 4, "found": found, "review_required": bool(found),
+            "detail": f"{label} candidates need player/table review: " + ', '.join(found) if found else f"No candidates in the live oracle-text {label.lower()} screen"}
 
 
-def check_mass_land_denial(card_names, bracket):
-    found = [n for n in card_names if n in MASS_LAND_DENIAL]
-    allowed = BRACKET_RULES[bracket]["mass_land_denial"]
+def check_extra_turns(card_names, bracket, cards_data=()):
+    return effect_screen(cards_data, r'extra turn', 'Extra-turn', bracket)
 
-    if allowed:
-        return {
-            "pass": True,
-            "found": found,
-            "detail": f"{len(found)} mass land denial card(s) — allowed at bracket {bracket} ✓",
-        }
-    passed = len(found) == 0
-    return {
-        "pass": passed,
-        "found": found,
-        "detail": "No mass land denial ✓" if passed else f"Mass land denial not allowed at bracket {bracket}: {', '.join(found)}",
-    }
+
+def check_mass_land_denial(card_names, bracket, cards_data=()):
+    return effect_screen(cards_data, r'destroy all lands|exile all lands|each player sacrifices (?:all|\w+ of) (?:their |the )?lands|lands? (?:don.t|doesn.t) untap', 'Land-denial', bracket)
 
 
 def check_house_rules(card_names, exclude_list):
@@ -414,19 +299,25 @@ def check_house_rules(card_names, exclude_list):
 
 def check_budget(cards_data, budget_limit):
     """Sum card prices from Scryfall data. budget_limit=None means report only, no pass/fail."""
-    total = 0.0
+    total_cents = 0
     priced = []
+    missing_prices = []
 
     for card in cards_data:
         if card.get("_not_found"):
+            missing_prices.append(card.get("name", "?"))
             continue
         name = card.get("name", "?")
         usd = card.get("prices", {}).get("usd")
-        if usd:
-            price = float(usd)
-            total += price
+        amount = cents(usd)
+        if amount is not None:
+            price = amount / 100
+            total_cents += amount
             priced.append((name, price))
+        else:
+            missing_prices.append(name)
 
+    total = total_cents / 100
     priced.sort(key=lambda x: x[1], reverse=True)
 
     if budget_limit is None:
@@ -437,12 +328,15 @@ def check_budget(cards_data, budget_limit):
             "detail": f"Total: ${total:.2f} (no budget limit set)",
         }
 
-    passed = total <= budget_limit
+    limit_cents = cents(budget_limit)
+    passed = limit_cents is not None and total_cents <= limit_cents and not missing_prices
     over = total - budget_limit
-    detail = f"${total:.2f} / ${budget_limit:.2f}"
+    detail = f"${total:.2f} known subtotal / ${budget_limit:.2f}"
+    if missing_prices:
+        detail += f" — {len(missing_prices)} unpriced cards; total budget unverified"
     if passed:
         detail += " ✓"
-    else:
+    elif over > 0:
         detail += f" — over by ${over:.2f}"
         if priced:
             top = ", ".join(f"{n} ${p:.2f}" for n, p in priced[:3])
@@ -453,6 +347,7 @@ def check_budget(cards_data, budget_limit):
         "total": total,
         "limit": budget_limit,
         "most_expensive": priced[:5],
+        "missing_prices": missing_prices,
         "detail": detail,
     }
 
@@ -481,7 +376,7 @@ def print_report(commander_name, bracket, results, not_found):
             ("Color identity",    results["color_identity"]),
             ("Ban list",          results["ban_list"]),
         ]),
-        ("Bracket Compliance", [
+        ("Bracket Screening (human review required)", [
             ("Game Changers",     results["game_changers"]),
             ("Extra turn cards",  results["extra_turns"]),
             ("Mass land denial",  results["mass_land_denial"]),
@@ -494,7 +389,7 @@ def print_report(commander_name, bracket, results, not_found):
         ]),
     ]
 
-    all_passed = True
+    all_passed = all(r["pass"] for r in results.values())
     for section_name, checks in sections:
         print(f"\n  [{section_name}]")
         for label, result in checks:
@@ -520,7 +415,7 @@ def print_report(commander_name, bracket, results, not_found):
 
     print(f"\n{'='*60}")
     if all_passed:
-        print(f"  RESULT: ALL CHECKS PASSED ✓")
+        print(f"  RESULT: AUTOMATED CHECKS PASSED — strategy/bracket review still required ✓")
     else:
         print(f"  RESULT: VIOLATIONS FOUND — resolve before finalizing")
     print(f"{'='*60}\n")
@@ -536,6 +431,7 @@ def main():
                         help="Path to the decklist file")
     parser.add_argument("--commander", required=True, metavar="NAME",
                         help="Commander card name")
+    parser.add_argument("--partner", default=None, help="Second commander (Partner/Friends forever/Background)")
     parser.add_argument("--bracket", type=int, choices=[1, 2, 3, 4, 5], required=True,
                         help="Power bracket (1-5)")
     parser.add_argument("--exclude", nargs="*", metavar="CARD", default=[],
@@ -544,49 +440,69 @@ def main():
                         help="Budget limit in USD (e.g. 150). Reports total price; fails if over limit.")
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args()
+    if args.budget is not None and cents(args.budget) is None:
+        parser.error("Budget must be a finite nonnegative amount, or omitted for no limit.")
 
     try:
+        rules = current_rules()
         # Parse decklist
-        print(f"Parsing {args.file}...")
+        print(f"Parsing {args.file}...", file=sys.stderr)
         card_names = parse_decklist(args.file)
         commander_name = args.commander
 
-        print(f"  {len(card_names)} cards found. Fetching card data from Scryfall...")
+        print(f"  {len(card_names)} cards found. Fetching card data from Scryfall...", file=sys.stderr)
 
         # Fetch commander
-        commander_card = get_commander_data(commander_name)
+        group = commander_group(commander_name, args.partner)
+        commander_names = [c["name"] for c in group]
+        commander_card = dict(group[0])
+        commander_card["color_identity"] = sorted({color for c in group for color in c["color_identity"]})
 
-        # Fetch all cards (skip basics — always legal)
-        cards_to_fetch = [n for n in card_names if n not in BASIC_LANDS]
+        # Fetch basics too: color identity and price still matter.
+        cards_to_fetch = card_names
         unique_names = list(dict.fromkeys(cards_to_fetch))  # deduplicated, preserve order
         total = len(unique_names)
 
-        print(f"  Fetching {total} cards in batches from Scryfall...", flush=True)
+        print(f"  Fetching {total} cards in batches from Scryfall...", flush=True, file=sys.stderr)
         cards_data = fetch_cards_batch(unique_names)
+
+        # Keep quantities for budget, include commander price.
+        lookup = {c["name"].lower(): c for c in cards_data}
+        budget_cards = [lookup.get(n.lower(), {"name": n, "_not_found": True}) for n in card_names] + group
+
+        if args.budget is not None:
+            live_prices = price_cards(card_names + commander_names)
+            budget_cards = [{"name": name, "prices": {"usd": str(live_prices[name] / 100) if live_prices.get(name) is not None else None}} for name in card_names + commander_names]
 
         # Run checks
         results = {
-            "card_count":          check_card_count(commander_name, card_names),
+            "card_count":          check_card_count(commander_names, card_names),
             "singleton":           check_singleton(card_names),
             "commander_legality":  check_commander_legality(commander_card),
             "color_identity":      check_color_identity(commander_card, cards_data),
             "ban_list":            check_ban_list(cards_data),
-            "game_changers":       check_game_changers(card_names, args.bracket),
-            "extra_turns":         check_extra_turns(card_names, args.bracket),
-            "mass_land_denial":    check_mass_land_denial(card_names, args.bracket),
+            "game_changers":       check_game_changers(card_names + commander_names, args.bracket),
+            "extra_turns":         check_extra_turns(card_names, args.bracket, cards_data + group),
+            "mass_land_denial":    check_mass_land_denial(card_names, args.bracket, cards_data + group),
             "house_rules":         check_house_rules(card_names, args.exclude),
-            "budget":              check_budget(cards_data, args.budget),
+            "budget":              check_budget(budget_cards, args.budget),
         }
         not_found = check_not_found(cards_data)
+        results["card_resolution"] = {"pass": not not_found, "detail": "All card names resolved" if not not_found else f"Unresolved cards: {not_found}"}
 
+        all_passed = all(r["pass"] for r in results.values())
         if args.format == "json":
             print(json.dumps({
                 "commander": commander_name,
+                "commanders": commander_names,
+                "rules_checked_at": rules["checked_at"],
+                "scope": "Automated screening; human strategy and bracket review required",
                 "bracket": args.bracket,
                 "results": results,
                 "not_found": not_found,
                 "all_passed": all(r["pass"] for r in results.values()),
             }, indent=2))
+            sys.exit(0 if all_passed else 1)
         else:
             all_passed = print_report(commander_name, args.bracket, results, not_found)
             sys.exit(0 if all_passed else 1)

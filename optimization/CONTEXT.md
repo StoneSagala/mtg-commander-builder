@@ -1,5 +1,12 @@
 # Optimization Workspace
 
+## Workflow contract
+- **Inputs:** Existing deck or `../deckbuilding/brews/[slug]-review.md`; `skills/tune-deck.md`; shared provider contract `../_shared/data-sources.md`.
+- **Process:** Diagnose, simulate, tune mana and cards, rerun checks, and record review decisions.
+- **Outputs:** `sessions/[slug]-[YYYY-MM-DD].md`; after player review, `../deckbuilding/decklists/[slug]-final.md`.
+- **Human check:** Player reviews changes and evidence before final promotion. Unknown data and failed combo checks must remain explicit.
+
+
 ## What This Workspace Is
 
 Where good decks become great ones. Decks come in two ways:
@@ -116,7 +123,8 @@ Run `/meta-check` and Web Search MCP. Does the deck compete in the current meta?
 | Web Search MCP | **Current meta data.** Tier lists, tournament results, top-performing lists. | Search "[format] meta [current month/year]" or "top [format] decks MTGGoldfish" |
 | `scripts/mana-curve.py` | **Visual curve analysis.** Supplemental to deck-health if more curve detail needed. | `python optimization/scripts/mana-curve.py deckfile.md` — outputs CMC distribution |
 | `scripts/color-analysis.py` | **Pip requirement analysis.** Input for mana base work. | `python optimization/scripts/color-analysis.py deckfile.md` — outputs color symbol counts |
-| `scripts/validate-decklist.py` | **Legality check.** Run before marking any deck as final. | `python optimization/scripts/validate-decklist.py deckfile.md [format]` |
+| `../deckbuilding/scripts/validate-deck.py` | **Commander final screening.** Checks current rules, total budget and paired commanders. | From repo root: `python3 deckbuilding/scripts/validate-deck.py --file deckfile.md --commander "Name" --bracket [player bracket]`; add `--partner "Name"` and `--budget [player total]` when supplied. |
+| `scripts/validate-decklist.py` | **Legacy non-Commander format check.** Does not certify current Commander bracket or pairing rules. | `python3 optimization/scripts/validate-decklist.py deckfile.md [format]` |
 
 ---
 
@@ -172,12 +180,6 @@ After each optimization pass, save a session note:
 
 ---
 
-## Script Note
-
-`backend/scripts/` contains parallel versions of several scripts above (`deck-health.py`, `goldfish.py`, `fetch-deck.py`, `validate-decklist.py`, `color-analysis.py`) that serve the web app API. Both sets are intentionally maintained separately — the scripts here are AI-session-facing; the backend versions serve web app requests with different interfaces. Do not confuse them.
-
----
-
 ## What NOT to Do
 
 - **Don't skip the diagnostics** — run `deck-health.py` and `goldfish.py` first, every time. The numbers tell you what to fix; skipping them means guessing.
@@ -185,5 +187,5 @@ After each optimization pass, save a session note:
 - **Don't optimize without re-simulating** — gut feel is not enough. Run `goldfish.py` before and after to confirm changes actually helped.
 - **Don't run `/meta-check` on a casual Commander deck** — meta analysis is for competitive and cEDH contexts.
 - **Don't load deckbuilding docs** — you're refining, not reinventing.
-- **Don't mark a deck final** without running `optimization/scripts/validate-decklist.py` — format legality is non-negotiable.
+- **Before marking a Commander deck final**, run `deckbuilding/scripts/validate-deck.py` from the repo root with the player's bracket, optional total budget and optional second commander, plus `deckbuilding/scripts/validate-combos.py --file [deckfile]`. Complete any required human strategy/bracket review. Use the legacy optimization validator only for its explicitly reviewed non-Commander format scope.
 - **Don't optimize without a clear game plan** — if you don't know what the deck is trying to do on turns 1-5, you can't evaluate whether a card earns its slot.

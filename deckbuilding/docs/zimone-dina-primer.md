@@ -1,4 +1,7 @@
 # Zimone and Dina — Sultai Lands Primer
+
+> Historical deck-specific primer. Revalidate cards, prices, bans and bracket expectations before using it; current rule references are generated separately.
+
 *Bracket 4 | "The lands are the superstars"*
 
 ---

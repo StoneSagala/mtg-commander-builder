@@ -1,0 +1,164 @@
+{
+  "checked_at": "2026-11-12T17:15:51.721369+00:00",
+  "commander": "Kotis, the Fangkeeper",
+  "checks": [
+    {
+      "name": "Current official rules",
+      "required": true,
+      "status": "pass",
+      "detail": {
+        "checked_at": "2026-11-12T17:13:21.185758+00:00",
+        "named_bans": 42,
+        "game_changers": 53
+      }
+    },
+    {
+      "name": "Scryfall commander",
+      "required": true,
+      "status": "pass",
+      "detail": {
+        "name": "Kotis, the Fangkeeper",
+        "released_at": "2025-04-11",
+        "color_identity": [
+          "B",
+          "G",
+          "U"
+        ]
+      }
+    },
+    {
+      "name": "Scryfall collection POST",
+      "required": true,
+      "status": "pass",
+      "detail": {
+        "resolved": 2
+      }
+    },
+    {
+      "name": "Scryfall search",
+      "required": true,
+      "status": "pass",
+      "detail": {
+        "cards": 175,
+        "total": 18587
+      }
+    },
+    {
+      "name": "EDHREC commanders/kotis-the-fangkeeper",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 12,
+        "entries": 322
+      }
+    },
+    {
+      "name": "EDHREC commanders/meren-of-clan-nel-toth",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 12,
+        "entries": 261
+      }
+    },
+    {
+      "name": "EDHREC tags",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 1,
+        "entries": 419
+      }
+    },
+    {
+      "name": "EDHREC tags/graveyard",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 14,
+        "entries": 411
+      }
+    },
+    {
+      "name": "EDHREC tags/graveyard/golgari",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 14,
+        "entries": 303
+      }
+    },
+    {
+      "name": "EDHREC cards/sol-ring",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 14,
+        "entries": 530
+      }
+    },
+    {
+      "name": "EDHREC commanders/year",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "lists": 1,
+        "entries": 100
+      }
+    },
+    {
+      "name": "Archidekt search",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "results": 1,
+        "first_id": 12304760
+      }
+    },
+    {
+      "name": "Archidekt import",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "name": "Kotis, the Fangkeeper",
+        "mainboard_entries": 86,
+        "commanders": [
+          [
+            1,
+            "Kotis, the Fangkeeper"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "Moxfield search",
+      "required": false,
+      "status": "blocked",
+      "detail": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "Moxfield import",
+      "required": false,
+      "status": "blocked",
+      "detail": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "Commander Spellbook",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "variants": 1
+      }
+    },
+    {
+      "name": "Spellbook deck search POST",
+      "required": false,
+      "status": "pass",
+      "detail": {
+        "complete": true,
+        "variants": 1,
+        "pages": 1
+      }
+    }
+  ]
+}

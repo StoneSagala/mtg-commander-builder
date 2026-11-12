@@ -32,3 +32,8 @@ backend/
 .DS_Store
 Thumbs.db
 *.log
+
+# Local Python artifacts (all workspace scripts)
+__pycache__/
+*.py[cod]
+.venv/

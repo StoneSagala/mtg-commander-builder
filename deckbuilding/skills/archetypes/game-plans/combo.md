@@ -32,7 +32,7 @@ Lock these in before building anything else. A combo deck's non-negotiables are:
 - **Redundant tutors** — at least 3 tutor effects at bracket 3; 5+ at bracket 4
 - **Card draw to find pieces** — Rhystic Study, Mystic Remora, Necropotence at higher brackets
 - **Interaction on the win turn** — Force of Will, Swan Song, Veil of Summer; opponents WILL have answers
-- **Fast mana** at bracket 4+ — Mana Vault, Mana Crypt, Chrome Mox to execute before opponents establish
+- **Fast mana** at bracket 4+ — Mana Vault and Chrome Mox to execute before opponents establish
 
 ---
 
@@ -44,16 +44,11 @@ Lock these in before building anything else. A combo deck's non-negotiables are:
 
 ---
 
-## Bracket Restrictions (Critical)
+## Current bracket review
 
-| Bracket | Combo Policy |
-|---------|-------------|
-| 1 | No infinite combos |
-| 2 | No infinite combos |
-| 3 | Late-game combos only (not consistently assembling before turn 6) |
-| 4–5 | All combos; early game combos expected |
-
-**Early-game combo = can consistently win before turn 6.**
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

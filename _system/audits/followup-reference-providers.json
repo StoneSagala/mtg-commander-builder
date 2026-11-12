@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "source": "Archidekt",
+      "id": 12304760,
+      "name": "KOTIS GOES WHERE HE PLEASES - TIPSY GOAT",
+      "author": "Edjuh",
+      "views": 8437,
+      "likes": 0,
+      "updated": "2025-04-04",
+      "url": "https://archidekt.com/decks/12304760",
+      "description": ""
+    }
+  ],
+  "providers": {
+    "moxfield": {
+      "status": "blocked",
+      "error": "HTTP Error 403: Forbidden",
+      "fallback": "Archidekt or paste/export a decklist"
+    },
+    "archidekt": {
+      "status": "pass",
+      "found": 1
+    }
+  }
+}

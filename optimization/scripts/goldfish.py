@@ -33,6 +33,7 @@ import sys
 import json
 import re
 import random
+import contextlib
 import time
 import argparse
 import urllib.request
@@ -417,7 +418,7 @@ def build_profile(
 ) -> dict:
     """Build deck profile from classified card data."""
 
-    unique = list(set(deck))
+    unique = list(dict.fromkeys(deck))
     lands, ramp, draw, tutors, win_cons, mill_cards, other = [], [], [], [], [], [], []
 
     for name in unique:
@@ -561,47 +562,27 @@ def london_mulligan(library: List[str], profile: dict, classified: Dict[str, dic
     """
     London mulligan. Returns (hand, remaining_library, mulligans, reason).
     """
-    deck = library[:]
-    random.shuffle(deck)
-    mulligans = 0
-    reason    = "keep"
-
-    land_set = set(profile["lands"])
-    key_set  = set(profile["key_hand"] + profile["key_gy"] + profile["keep_if"])
-
-    def card_priority(c: str) -> float:
-        if c in key_set:                                    return 0.0
-        if c in land_set:                                   return 1.0
-        if c in set(profile["ramp"]):                       return 2.0
-        return 3.0 + classified.get(c, {}).get("cmc", 0) * 0.1
-
-    for hand_size in range(7, 3, -1):
-        hand      = deck[:hand_size]
-        remainder = deck[hand_size:]
-        keep, rsn = evaluate_hand(hand, profile, classified)
-
-        if keep:
-            put_back_n = 7 - hand_size
-            if put_back_n > 0:
-                sorted_hand = sorted(hand, key=card_priority)
-                hand        = sorted_hand[:hand_size]
-                put_back    = sorted_hand[hand_size:]
-                random.shuffle(put_back)
-                remainder   = put_back + remainder
-                random.shuffle(remainder)
-            reason = rsn
-            break
-
-        mulligans += 1
-        reason     = rsn
-        deck = hand + remainder
+    land_set = set(profile['lands'])
+    key_set = set(profile['key_hand'] + profile['key_gy'] + profile['keep_if'])
+    def priority(card):
+        if card in key_set: return 0
+        if card in land_set: return 1
+        if card in profile['ramp']: return 2
+        return 3 + classified.get(card, {}).get('cmc', 0) * 0.1
+    # Multiplayer Commander gets one free mulligan. Every attempt draws seven;
+    # later kept hands bottom one per paid mulligan, never shuffle those into draws.
+    for redraws in range(5):
+        deck = library[:]
         random.shuffle(deck)
-    else:
-        hand      = deck[:4]
-        remainder = deck[4:]
-        reason    = "screw"
-
-    return hand, list(remainder), mulligans, reason
+        drawn, remainder = deck[:7], deck[7:]
+        bottom_count = max(0, redraws - 1)
+        ordered = sorted(drawn, key=priority)
+        hand = ordered[:7 - bottom_count]
+        bottom = ordered[7 - bottom_count:]
+        keep, reason = evaluate_hand(hand, profile, classified)
+        if keep or redraws == 4:
+            return hand, remainder + bottom, redraws, reason
+    raise AssertionError('unreachable mulligan state')
 
 
 # ─── Tutor Logic ──────────────────────────────────────────────────────────────
@@ -1023,9 +1004,13 @@ def simulate_game(
 def run_simulation(
     deck: List[str], profile: dict,
     classified: Dict[str, dict], card_data: Dict[str, dict],
-    games: int,
+    games: int, seed=None,
 ) -> dict:
     """Run N games and aggregate results."""
+    if games < 1:
+        raise ValueError("games must be positive")
+    if seed is not None:
+        random.seed(seed)
 
     mull_dist         = defaultdict(int)
     screw_count       = 0
@@ -1385,6 +1370,7 @@ def main() -> None:
     parser.add_argument("--gy-cards",  default="",     metavar="CARDS", help="GY-tracked pieces (enables GY mode)")
     parser.add_argument("--keep-if",   default="",     metavar="CARDS", help="Cards that make 1-land hands keepable")
     parser.add_argument("--win-mana",  default=0,      type=int,        help="Mana to execute win con (auto if 0)")
+    parser.add_argument("--seed", type=int, default=None, help="Repeatable simulation seed for before/after comparisons")
     parser.add_argument("--games",     default=1000,   type=int,        help="Games to simulate (default: 1000)")
     parser.add_argument("--format",    default="text", choices=["text", "json"])
     parser.add_argument("--deck-type", default="auto",
@@ -1392,93 +1378,98 @@ def main() -> None:
                         help="Override deck type detection (auto = detect from card data)")
     parser.add_argument("--budget",    default=0,      type=int,        help="Deck budget in USD (0 = no limit). Adjusts mana base recommendations.")
     args = parser.parse_args()
+    if args.games < 1:
+        parser.error("--games must be positive")
 
-    deck, sections, commander = parse_decklist(args.file)
-    if args.commander:
-        commander = args.commander
+    with contextlib.redirect_stdout(sys.stderr):
+        deck, sections, commander = parse_decklist(args.file)
+        if args.commander:
+            commander = args.commander
 
-    if len(deck) < 10:
-        print(f"Error: only {len(deck)} cards parsed — check file format.")
-        sys.exit(1)
+        if len(deck) < 10:
+            print(f"Error: only {len(deck)} cards parsed — check file format.")
+            sys.exit(1)
 
-    # Fetch Scryfall data
-    unique = list(set(deck))
-    print(f"Fetching card data ({len(unique)} unique cards)...", end="", flush=True)
-    card_data = fetch_card_data(unique)
-    print(f" done.")
+        # Fetch Scryfall data
+        unique = list(dict.fromkeys(deck))
+        print(f"Fetching card data ({len(unique)} unique cards)...", end="", flush=True)
+        card_data = fetch_card_data(unique)
+        print(f" done.")
 
-    # Classify
-    classified: Dict[str, dict] = {}
-    for name in unique:
-        section_role = None
-        for role_key, names_list in sections.items():
-            if name in names_list:
-                section_role = role_key
-                break
-        classified[name] = classify_card(name, card_data.get(name, dict(_EMPTY_CARD)), section_role)
+        # Classify
+        classified: Dict[str, dict] = {}
+        for name in unique:
+            section_role = None
+            for role_key, names_list in sections.items():
+                if name in names_list:
+                    section_role = role_key
+                    break
+            classified[name] = classify_card(name, card_data.get(name, dict(_EMPTY_CARD)), section_role)
 
-    # Parse CSV overrides
-    def parse_csv(s: str) -> List[str]:
-        return [x.strip() for x in s.split(",") if x.strip()] if s.strip() else []
+        # Parse CSV overrides
+        def parse_csv(s: str) -> List[str]:
+            return [x.strip() for x in s.split(",") if x.strip()] if s.strip() else []
 
-    def match_names(raw_list: List[str]) -> List[str]:
-        matched = []
-        for raw in raw_list:
-            found = [n for n in unique if raw.lower() in n.lower()]
-            if found:
-                matched.append(found[0])
+        def match_names(raw_list: List[str]) -> List[str]:
+            matched = []
+            for raw in raw_list:
+                found = [n for n in unique if raw.lower() in n.lower()]
+                if found:
+                    matched.append(found[0])
+                else:
+                    print(f"  Warning: '{raw}' not found in deck — skipping")
+            return matched
+
+        key_hand_override = match_names(parse_csv(args.key_cards))
+        key_gy_override   = match_names(parse_csv(args.gy_cards))
+        keep_if_override  = match_names(parse_csv(args.keep_if))
+
+        profile = build_profile(
+            deck, sections, card_data, classified,
+            key_hand_override, key_gy_override, keep_if_override,
+            args.win_mana if args.win_mana > 0 else None,
+        )
+
+        # Apply deck type override or auto-detection
+        deck_type = args.deck_type
+        if deck_type == "auto":
+            if profile["gy_mode"]:
+                deck_type = DECK_TYPE_GY
+            elif profile.get("is_parasitic"):
+                deck_type = DECK_TYPE_PARASITIC
             else:
-                print(f"  Warning: '{raw}' not found in deck — skipping")
-        return matched
+                deck_type = DECK_TYPE_COMBO
+        profile["deck_type"] = deck_type
+        # Propagate explicit parasitic flag
+        if deck_type == DECK_TYPE_PARASITIC:
+            profile["is_parasitic"] = True
+        elif deck_type == DECK_TYPE_FUN:
+            profile["is_parasitic"] = False
 
-    key_hand_override = match_names(parse_csv(args.key_cards))
-    key_gy_override   = match_names(parse_csv(args.gy_cards))
-    keep_if_override  = match_names(parse_csv(args.keep_if))
+        # Print profile summary
+        print(f"\nDeck profile detected:")
+        print(f"  Lands: {profile['land_count']}  Ramp: {len(profile['ramp'])}  "
+              f"Draw: {len(profile['draw'])}  Tutors: {len(profile['tutors'])}  "
+              f"Win cons: {len(profile['win_cons'])}")
+        print(f"  Avg CMC: {profile['avg_cmc']:.1f}  Rocks: {profile['rock_count']}  "
+              f"GY mode: {'yes' if profile['gy_mode'] else 'no'}  "
+              f"Min lands to keep: {profile['min_lands_keep']}  "
+              f"Win mana: {profile['win_mana']}")
+        if profile["key_hand"]:
+            print(f"  Tracking (hand): {', '.join(profile['key_hand'][:5])}")
+        if profile["key_gy"]:
+            print(f"  Tracking (GY):   {', '.join(profile['key_gy'][:5])}")
+        if profile["keep_if"]:
+            print(f"  Always keep if:  {', '.join(profile['keep_if'][:3])}")
 
-    profile = build_profile(
-        deck, sections, card_data, classified,
-        key_hand_override, key_gy_override, keep_if_override,
-        args.win_mana if args.win_mana > 0 else None,
-    )
-
-    # Apply deck type override or auto-detection
-    deck_type = args.deck_type
-    if deck_type == "auto":
-        if profile["gy_mode"]:
-            deck_type = DECK_TYPE_GY
-        elif profile.get("is_parasitic"):
-            deck_type = DECK_TYPE_PARASITIC
-        else:
-            deck_type = DECK_TYPE_COMBO
-    profile["deck_type"] = deck_type
-    # Propagate explicit parasitic flag
-    if deck_type == DECK_TYPE_PARASITIC:
-        profile["is_parasitic"] = True
-    elif deck_type == DECK_TYPE_FUN:
-        profile["is_parasitic"] = False
-
-    # Print profile summary
-    print(f"\nDeck profile detected:")
-    print(f"  Lands: {profile['land_count']}  Ramp: {len(profile['ramp'])}  "
-          f"Draw: {len(profile['draw'])}  Tutors: {len(profile['tutors'])}  "
-          f"Win cons: {len(profile['win_cons'])}")
-    print(f"  Avg CMC: {profile['avg_cmc']:.1f}  Rocks: {profile['rock_count']}  "
-          f"GY mode: {'yes' if profile['gy_mode'] else 'no'}  "
-          f"Min lands to keep: {profile['min_lands_keep']}  "
-          f"Win mana: {profile['win_mana']}")
-    if profile["key_hand"]:
-        print(f"  Tracking (hand): {', '.join(profile['key_hand'][:5])}")
-    if profile["key_gy"]:
-        print(f"  Tracking (GY):   {', '.join(profile['key_gy'][:5])}")
-    if profile["keep_if"]:
-        print(f"  Always keep if:  {', '.join(profile['keep_if'][:3])}")
-
-    print(f"\nSimulating {args.games} games...", end="", flush=True)
-    stats = run_simulation(deck, profile, classified, card_data, args.games)
-    print(" done.")
+        print(f"\nSimulating {args.games} games...", end="", flush=True)
+        stats = run_simulation(deck, profile, classified, card_data, args.games, seed=args.seed)
+        print(" done.")
 
     if args.format == "json":
         serializable = {k: v for k, v in stats.items()}
+        serializable["seed"] = args.seed
+        serializable["scope"] = "Goldfish heuristic; no opponent interaction or complete game engine"
         # Convert defaultdict and tuple entries for JSON
         serializable["top_stuck_cards"] = [[n, c] for n, c in stats["top_stuck_cards"]]
         print(json.dumps(serializable, indent=2))

@@ -46,7 +46,7 @@ If the player skips the script and just starts talking, ask: *"Want to run `pyth
 
 **The rule: never present commanders from memory when a theme pivots. Always fetch first.**
 
-The most likely miss is always a recently printed commander designed specifically for the new theme — one that memory won't surface because it's too new. Keene, Nine-Fingers is the canonical example: she is THE gates commander, printed in 2024, and will not appear in any reasoning-from-memory shortlist.
+The most likely miss is always a recently printed commander designed specifically for the new theme — one that memory won't surface because it's too new. A gates strategy, for example, needs a live search for gate-specific commanders rather than a memory-only shortlist.
 
 ### Flow E Steps
 
@@ -251,9 +251,9 @@ Confirm color identity (fetch card data), then ask the two commander-specific qu
 - Two complementary abilities serve the playstyle better than one commander
 
 **Push back gently when:**
-- Bracket choice conflicts with playstyle (wants combos at bracket 1-2, wants 4+ game changers at bracket 3)
+- Compare playstyle and Game Changer count with the freshly checked official bracket data; discuss timing and table expectations with the player.
 - Constraints conflict with commander (e.g., "no graveyard" but picked a reanimator commander)
-- Budget doesn't support the bracket (sub-$100 for bracket 4/5 — redirect to bracket 3)
+- Confirm the player's optional total-deck budget. Do not infer or force a bracket from spending; discuss tradeoffs and owned/proxy cards with the player.
 
 **Never trust memory for recently printed commanders:**
 - Cards printed in the last 18 months are the most likely miss — always fetch before presenting a shortlist

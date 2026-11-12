@@ -1,0 +1,30 @@
+test_batch_deduplication_and_limit (test_data_sources.DataSourceTests) ... ok
+test_edhrec_404_and_outage_use_labelled_legal_fallback (test_data_sources.DataSourceTests) ... ok
+test_empty_edhrec_pool_uses_fallback (test_data_sources.DataSourceTests) ... ok
+test_inclusion_derived_from_counts (test_data_sources.DataSourceTests) ... ok
+test_json_feed_replaces_page_html (test_data_sources.DataSourceTests) ... ok
+test_nonlegal_and_off_color_cards_removed (test_data_sources.DataSourceTests) ... ok
+test_roles_avoid_treasure_reminder_false_positive (test_data_sources.DataSourceTests) ... ok
+test_schema_drift_is_not_absence (test_data_sources.DataSourceTests) ... ok
+test_scryfall_failure_does_not_assume_colorless (test_data_sources.DataSourceTests) ... ok
+test_timeout_and_retry_429 (test_data_sources.DataSourceTests) ... ok
+test_budget_unknown_is_not_pass (test_data_sources.ValidationRegressionTests) ... ok
+test_moxfield_v3_uses_names_in_nested_boards (test_data_sources.ValidationRegressionTests) ... ok
+test_optimizer_parser_accepts_generated_sections (test_data_sources.ValidationRegressionTests) ... ok
+test_text_report_fails_unresolved_cards (test_data_sources.ValidationRegressionTests) ... ok
+test_tutors_header_ends_commander_section (test_data_sources.ValidationRegressionTests) ... ok
+test_unreleased_commander_rejected (test_data_sources.ValidationRegressionTests) ... ok
+test_archidekt_search_contract (test_data_sources.WorkflowTests) ... ok
+test_generator_refuses_existing_brief_before_network (test_data_sources.WorkflowTests) ... ok
+test_interaction_target_includes_wipes_once (test_data_sources.WorkflowTests) ... ok
+test_optional_moxfield_timeout_does_not_block_archidekt (test_data_sources.WorkflowTests) ... ok
+test_spellbook_endpoint (test_data_sources.WorkflowTests) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.157s
+
+OK
+  Moxfield: searching for 'Kotis'...
+    Moxfield unavailable: offline
+  Archidekt: searching for 'Kotis'...
+    Found 0 Archidekt list(s).

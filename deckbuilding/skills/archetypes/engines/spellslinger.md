@@ -50,11 +50,11 @@ A storm turn (bracket 4+) looks like:
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Spell payoffs with moderate spell density; no storm
-- **Bracket 3:** Archmage Emeritus + Underworld Breach; Bonus Round as power doubler
-- **Brackets 4–5:** Full storm package; Underworld Breach + Brain Freeze / Grapeshot; Aetherflux Reservoir as combo finisher
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

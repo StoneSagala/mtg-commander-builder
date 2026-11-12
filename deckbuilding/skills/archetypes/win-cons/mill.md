@@ -40,11 +40,11 @@ In Commander, each opponent has ~60 card libraries. Milling all three simultaneo
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Mill is usually too slow without recursive loops; best as a secondary win con
-- **Bracket 3:** Maddening Cacophony + Fraying Sanity is a viable primary win package
-- **Brackets 4–5:** Persistent Petitioners, Mesmeric Orb + Basalt Monolith loop, Thassa's Oracle as emergency self-mill win
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

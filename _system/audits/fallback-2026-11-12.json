@@ -1,0 +1,23 @@
+{
+  "simulation": "Only EDHREC deliberately disabled; Scryfall requests are live",
+  "source": "Scryfall fallback",
+  "commander": "Kotis, the Fangkeeper",
+  "identity": [
+    "B",
+    "G",
+    "U"
+  ],
+  "categories": {
+    "Ramp": 44,
+    "Lands": 62,
+    "Counterspells": 8,
+    "Removal": 10,
+    "Card Draw": 29,
+    "Tutors": 4,
+    "Theme Candidates": 113
+  },
+  "warnings": [
+    "EDHREC unavailable: <urlopen error simulated EDHREC outage>. This does not establish that the commander is too new. Using a generic legal-color pool; strategy review is required.",
+    "Card roles use Scryfall text heuristics. Review roles, win conditions, bracket and total budget before finalizing."
+  ]
+}

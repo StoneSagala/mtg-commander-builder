@@ -6,7 +6,7 @@ Generate value through artifact synergies — cost reduction, ETB triggers, arti
 
 ## How Value Is Generated
 
-**Fast mana** — Sol Ring, Mana Vault, Grim Monolith, Mana Crypt accelerate development by 2–4 turns. Artifact decks play their key pieces far ahead of curve.
+**Fast mana** — Sol Ring, Mana Vault and Grim Monolith accelerate development by 2–4 turns. Artifact decks play their key pieces far ahead of curve.
 
 **Cost reduction** — Foundry Inspector, Etherium Sculptor, Jhoira's Familiar reduce artifacts to near-free; enables chaining multiple artifacts per turn.
 
@@ -14,7 +14,7 @@ Generate value through artifact synergies — cost reduction, ETB triggers, arti
 
 **Artifact count payoffs** — Darksteel Juggernaut, Cyberdrive Awakener, Brudiclad all care about artifact count hitting thresholds.
 
-**Treasure/Gold** — treasure token generators (Smothering Tithe, Dockside Extortionist, Pitiless Plunderer) are a sub-engine that bridges to other strategies.
+**Treasure/Gold** — treasure token generators (Smothering Tithe and Pitiless Plunderer) are a sub-engine that bridges to other strategies.
 
 ---
 
@@ -41,11 +41,11 @@ Sol Ring · Arcane Signet · Mana Vault · Smothering Tithe · Sai, Master Thopt
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Sol Ring + Arcane Signet base; Myrs and treasure tokens as supplemental mana
-- **Bracket 3:** Mana Vault, Grim Monolith; Smothering Tithe as premium addition
-- **Brackets 4–5:** Mana Crypt, Chrome Mox, Mox Diamond; Dockside Extortionist as fast mana engine
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

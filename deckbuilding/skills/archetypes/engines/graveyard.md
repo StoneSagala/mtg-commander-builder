@@ -12,7 +12,7 @@ Use the graveyard as a second hand. Fill it deliberately, then recur threats, ge
 
 **Graveyard as resource** — flashback (Past in Flames), escape (Kroxa), delve (Tasigur), and similar mechanics turn dead cards into live ones.
 
-**Self-mill payoffs** — Stitcher's Supplier, Satyr Wayfinder, Griselbrand (via Reanimate) fill the yard while advancing the plan.
+**Self-mill payoffs** — Stitcher's Supplier and Satyr Wayfinder fill the yard while advancing the plan.
 
 ---
 
@@ -48,11 +48,11 @@ Opponents will run graveyard hate. Plan for it:
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Recursion-light; Sun Titan, Eternal Witness; no dedicated fill package
-- **Bracket 3:** Buried Alive + reanimation package; Underworld Breach as value engine
-- **Brackets 4–5:** Full reanimator; Entomb + Reanimate on turn 1–2; Hermit Druid combo lines
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

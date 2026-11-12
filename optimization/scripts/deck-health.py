@@ -145,7 +145,7 @@ def fetch_cards_batch(names):
                 "Content-Type": "application/json",
             },
         )
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         for card in data.get("data", []):
             price_str = card.get("prices", {}).get("usd")
@@ -165,7 +165,7 @@ def fetch_commander_data(name):
     url = f"{SCRYFALL_BASE}/cards/named?{encoded}"
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})
     time.sleep(0.1)
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 

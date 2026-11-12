@@ -25,9 +25,14 @@ import urllib.error
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
+
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "_shared"))
+from data_sources import edhrec_page
+
 EDHREC_BASE = "https://edhrec.com"
 SCRYFALL_BASE = "https://api.scryfall.com"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 # Deck count thresholds used as bracket proxy (same as filter-commanders.py)
 BRACKET_CONFIG = {
@@ -69,19 +74,7 @@ def slugify(name):
 
 
 def fetch_page(path):
-    """Fetch an EDHREC page and extract __NEXT_DATA__."""
-    time.sleep(0.2)
-    url = f"{EDHREC_BASE}{path}"
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(req) as resp:
-            html = resp.read().decode("utf-8")
-    except urllib.error.HTTPError as e:
-        raise e
-    match = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
-    if not match:
-        raise ValueError(f"No NEXT_DATA found at {url}")
-    return json.loads(match.group(1))["props"]["pageProps"]["data"]
+    return edhrec_page(path)
 
 
 def extract_commanders_from_cardlists(cardlists):
@@ -198,7 +191,7 @@ def fetch_commanders_prices_batch(commanders):
             data=payload,
             headers={"User-Agent": USER_AGENT, "Accept": "application/json", "Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         for card in data.get("data", []):
             price_str = card.get("prices", {}).get("usd")

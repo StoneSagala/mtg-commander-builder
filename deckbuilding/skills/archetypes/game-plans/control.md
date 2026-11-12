@@ -49,11 +49,11 @@ Control runs lean on the curve early and holds up mana. Every 2–3 mana should 
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Soft control — reactive removal, minimal counterspells (pods dislike heavy counters at low brackets)
-- **Bracket 3:** 4–6 counterspells; Cyclonic Rift as premier sweeper
-- **Brackets 4–5:** Full permission suite; Force of Will, Fierce Guardianship, Mana Drain
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

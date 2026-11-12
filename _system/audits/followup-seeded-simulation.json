@@ -1,0 +1,89 @@
+{
+  "games": 50,
+  "natural_keep_pct": 96.0,
+  "screw_pct": 0.0,
+  "flood_pct": 0.0,
+  "avg_mulligans": 0.04,
+  "mull_dist": {
+    "0": 48,
+    "1": 2
+  },
+  "avg_lands_per_turn": [
+    1.0,
+    2.22,
+    3.32,
+    4.18,
+    4.97,
+    5.31,
+    4.83,
+    4.33,
+    4.0,
+    3.0,
+    3.0,
+    3.0,
+    3.0,
+    4.0,
+    4.0
+  ],
+  "avg_mana_per_turn": [
+    1.36,
+    2.84,
+    4.1,
+    4.82,
+    5.49,
+    5.56,
+    5.33,
+    5.0,
+    5.0,
+    4.0,
+    4.0,
+    4.0,
+    4.0,
+    5.0,
+    6.0
+  ],
+  "avg_ramp_turn": 2.4,
+  "avg_draw_turn": 3.0,
+  "avg_dead_turns": 0.44,
+  "color_fail_pct": 80.0,
+  "won_games": 50,
+  "win_pct": 100.0,
+  "avg_win_turn": 5.2,
+  "win_dist": {
+    "5": 68.0,
+    "7": 94.0,
+    "9": 98.0,
+    "12": 98.0,
+    "15": 100.0,
+    "30": 100.0
+  },
+  "bottleneck_piece": null,
+  "bottleneck_pct": 0.0,
+  "key_stats": {},
+  "top_stuck_cards": [
+    [
+      "Sawtusk Demolisher",
+      10
+    ],
+    [
+      "Aqueous Form",
+      10
+    ],
+    [
+      "Rancor",
+      10
+    ],
+    [
+      "Trygon Predator",
+      10
+    ],
+    [
+      "Slip Out the Back",
+      9
+    ]
+  ],
+  "avg_threat_turn": 4.2,
+  "threat_deploy_pct": 100.0,
+  "seed": 42,
+  "scope": "Goldfish heuristic; no opponent interaction or complete game engine"
+}

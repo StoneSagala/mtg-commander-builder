@@ -1,0 +1,93 @@
+{
+  "commander": "Kotis, the Fangkeeper",
+  "commanders": [
+    "Kotis, the Fangkeeper"
+  ],
+  "rules_checked_at": "2026-11-12T17:13:21.185758+00:00",
+  "scope": "Automated screening; human strategy and bracket review required",
+  "bracket": 3,
+  "results": {
+    "card_count": {
+      "pass": false,
+      "total": 95,
+      "detail": "95/100 cards (add 5)"
+    },
+    "singleton": {
+      "pass": true,
+      "duplicates": {},
+      "detail": "No duplicates \u2713"
+    },
+    "commander_legality": {
+      "pass": true,
+      "detail": "Legal commander \u2713"
+    },
+    "color_identity": {
+      "pass": true,
+      "violations": [],
+      "detail": "Color identity OK \u2713"
+    },
+    "ban_list": {
+      "pass": true,
+      "banned_cards": [],
+      "detail": "No banned cards \u2713"
+    },
+    "game_changers": {
+      "pass": true,
+      "found": [],
+      "cap": 3,
+      "detail": "0/3 Game Changers allowed at bracket 3 \u2713"
+    },
+    "extra_turns": {
+      "pass": true,
+      "found": [],
+      "review_required": false,
+      "detail": "No candidates in the live oracle-text extra-turn screen"
+    },
+    "mass_land_denial": {
+      "pass": true,
+      "found": [],
+      "review_required": false,
+      "detail": "No candidates in the live oracle-text land-denial screen"
+    },
+    "house_rules": {
+      "pass": true,
+      "found": [],
+      "detail": "No house rules to check"
+    },
+    "budget": {
+      "pass": true,
+      "total": 94.15,
+      "limit": 100.0,
+      "most_expensive": [
+        [
+          "Ancient Cellarspawn",
+          6.36
+        ],
+        [
+          "Tasha, the Witch Queen",
+          6.25
+        ],
+        [
+          "Winged Boots",
+          5.75
+        ],
+        [
+          "Slip Out the Back",
+          4.95
+        ],
+        [
+          "Felix Five-Boots",
+          4.54
+        ]
+      ],
+      "missing_prices": [],
+      "detail": "$94.15 known subtotal / $100.00 \u2713"
+    },
+    "card_resolution": {
+      "pass": true,
+      "detail": "All card names resolved"
+    }
+  },
+  "not_found": [],
+  "all_passed": false
+}

@@ -28,7 +28,7 @@ def get(url):
     """Make a GET request to Scryfall. Respects their rate limit guideline."""
     time.sleep(0.1)  # Scryfall requests 50-100ms between calls
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"})
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 

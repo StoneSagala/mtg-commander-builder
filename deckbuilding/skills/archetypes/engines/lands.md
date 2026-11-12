@@ -40,11 +40,11 @@ Azusa, Lost but Seeking · Exploration · Oracle of Mul Daya · Crucible of Worl
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Landfall creatures (Emeria Angel, Roil Elemental); basic land fetchers; no extra drop abuse
-- **Bracket 3:** Azusa + Crucible + Life from the Loam value loop; Field of the Dead for token generation
-- **Brackets 4–5:** Dark Depths + Thespian's Stage combo; Valakut with Dryad of the Ilysian Grove; storm-level land recursion with Gitrog Monster
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

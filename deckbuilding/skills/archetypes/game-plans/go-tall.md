@@ -42,11 +42,11 @@ Win through quality over quantity. Build one creature (usually the commander) in
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Equipment-heavy Voltron. Sun-Forged, Argentum Armor, Sword of Fire and Ice
-- **Bracket 3:** Double strike + Fireshrieker, Masterwork of Ingenuity, Stoneforge Mystic
-- **Bracket 4–5:** Infect (21 → 10 poison), one-shot kills with Berserk + Hatred + double strike
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

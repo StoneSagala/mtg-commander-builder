@@ -26,7 +26,7 @@ import datetime
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 
 # ─── Platform detection ───────────────────────────────────────────────────────
@@ -76,23 +76,21 @@ def fetch_moxfield(deck_id: str) -> dict:
     deck_format = data.get("format", "commander").lower()
     deck_name = data.get("name", "Untitled Deck")
 
-    # Commander(s)
-    commanders = []
-    for name, entry in data.get("commanders", {}).items():
-        qty = entry.get("quantity", 1)
-        commanders.append((qty, name))
+    # Current v3 boards are keyed by card IDs, not names. Retain legacy roots.
+    def entries(board):
+        boards = data.get("boards", {})
+        records = boards.get(board, {}).get("cards", {}) if boards else data.get(board, {})
+        result = []
+        for key, entry in records.items():
+            name = entry.get("card", {}).get("name", key)
+            result.append((entry.get("quantity", 1), name))
+        return result
 
-    # Mainboard — Moxfield returns {card_name: {quantity, card, ...}}
-    mainboard = []
-    for name, entry in data.get("mainboard", {}).items():
-        qty = entry.get("quantity", 1)
-        mainboard.append((qty, name))
-
-    # Companions
-    companions = []
-    for name, entry in data.get("companions", {}).items():
-        qty = entry.get("quantity", 1)
-        companions.append((qty, name))
+    commanders = entries("commanders")
+    mainboard = entries("mainboard")
+    companions = entries("companions")
+    if not commanders or not mainboard:
+        raise ValueError("Moxfield returned no commander or mainboard. Check deck format, privacy and response schema.")
 
     return {
         "name": deck_name,
@@ -245,9 +243,13 @@ def main():
         description="Fetch a decklist from Moxfield or Archidekt."
     )
     parser.add_argument("url", help="Deck URL (Moxfield or Archidekt)")
+    parser.add_argument("--force", action="store_true", help="Explicitly replace an existing output file")
     parser.add_argument("--output", metavar="PATH", default=None,
                         help="Save output to this file path instead of printing to stdout")
     args = parser.parse_args()
+    from pathlib import Path
+    if args.output and Path(args.output).exists() and not args.force:
+        parser.error("Output already exists; choose a new path or explicitly use --force.")
 
     try:
         platform, deck_id = detect_platform(args.url)
@@ -267,6 +269,8 @@ def main():
         sys.exit(1)
     except urllib.error.HTTPError as e:
         print(f"HTTP {e.code}: {e.reason}")
+        if e.code == 403:
+            print("Provider access is blocked. Paste/export the decklist or share an Archidekt link; this is not evidence that the commander is unsupported.")
         sys.exit(1)
 
     output = format_deck(deck)
@@ -274,7 +278,7 @@ def main():
     if args.output:
         import os
         os.makedirs(os.path.dirname(args.output) if os.path.dirname(args.output) else ".", exist_ok=True)
-        with open(args.output, "w", encoding="utf-8") as f:
+        with open(args.output, "w" if args.force else "x", encoding="utf-8") as f:
             f.write(output)
         total = (sum(q for q,_ in deck["commanders"]) +
                  sum(q for q,_ in deck["mainboard"]))

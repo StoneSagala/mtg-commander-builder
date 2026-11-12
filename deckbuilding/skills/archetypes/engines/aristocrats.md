@@ -37,7 +37,7 @@ Aristocrats can function as pure value OR as a combo:
 - **Value mode:** incremental drain over several turns; resilient, grindy
 - **Combo mode:** Gravecrawler + Phyrexian Altar + Blood Artist = infinite drain; Nooze + Mikaeus the Unhallowed + sacrifice outlet = infinite loop
 
-Check bracket before including explicit infinite loops (bracket 3 late-game only; bracket 1–2 never).
+Review explicit infinite loops against the current official bracket guidance and the player's table expectations.
 
 ---
 
@@ -49,11 +49,11 @@ Check bracket before including explicit infinite loops (bracket 3 late-game only
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Incremental drain only; no infinite loops; Grave Pact as a curve-topper
-- **Bracket 3:** Gravecrawler + Phyrexian Altar; Dictate of Erebos as removal engine
-- **Brackets 4–5:** Combo lines (Nooze, Mikaeus); Dockside Extortionist loops with free sacrifice outlets
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

@@ -1,0 +1,30 @@
+name: Data source regression checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      live:
+        description: Check live providers and save diagnostic evidence
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Regression tests (offline)
+        run: python3 -m unittest discover -s tests -v
+      - name: Live provider checks (manual)
+        if: github.event_name == 'workflow_dispatch' && inputs.live
+        run: python3 _system/audit-connections.py > connections.json
+      - uses: actions/upload-artifact@v4
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.live
+        with:
+          name: connection-report
+          path: connections.json

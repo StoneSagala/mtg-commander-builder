@@ -52,11 +52,11 @@ Panharmonicon · Ephemerate · Conjurer's Closet · Teleportation Circle · Ghos
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Conjurer's Closet + value ETBs; Restoration Angel as interactive piece
-- **Bracket 3:** Panharmonicon; Brago, King Eternal untap engine; Felidar Guardian + Saheeli Rai infinite (bracket check)
-- **Brackets 4–5:** Felidar Guardian combo lines; Thassa, Deep-Dwelling + any ETB win; Eldrazi Displacer infinite with Phyrexian Altar
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

@@ -51,11 +51,11 @@ Hardened Scales · Branching Evolution · Doubling Season · Ozolith · Grateful
 
 ---
 
-## Bracket Scaling
+## Current bracket review
 
-- **Brackets 1–2:** Basic +1/+1 counter producers; Gavony Township; Solidarity of Heroes
-- **Bracket 3:** Hardened Scales + Branching Evolution; Evolution Sage for value proliferate
-- **Brackets 4–5:** Doubling Season + planeswalker ultimates; Atraxa, Praetors' Voice; Walking Ballista as instant win with infinite counters
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

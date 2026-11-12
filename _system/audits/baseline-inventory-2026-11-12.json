@@ -1,0 +1,578 @@
+{
+  "baseline_commit": "0c726eb1ed458a0b7a3f78c58ff9f0965f6050f6",
+  "files": [
+    {
+      "path": ".gitignore",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "catalog",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "README.md"
+      ]
+    },
+    {
+      "path": "CONTEXT.md",
+      "role": "contract",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/CONTEXT.md",
+        "Ideation/skills/ideate.md",
+        "README.md",
+        "deckbuilding/CONTEXT.md",
+        "optimization/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "Ideation/CONTEXT.md",
+      "role": "contract",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "CONTEXT.md"
+      ]
+    },
+    {
+      "path": "Ideation/docs/brackets.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "Ideation/docs/playstyles.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "Ideation/scripts/_cache/themes-cache.json",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "Ideation/scripts/_cache/top-commanders-cache.json",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "Ideation/scripts/discover-playstyle.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/scripts/intake.py"
+      ]
+    },
+    {
+      "path": "Ideation/scripts/fetch-card-commanders.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "Ideation/scripts/fetch-edhrec-data.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/scripts/fetch-card-commanders.py",
+        "Ideation/scripts/filter-commanders.py",
+        "Ideation/scripts/match-themes.py",
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "Ideation/scripts/fetch-top-commanders.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "Ideation/scripts/filter-commanders.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "Ideation/scripts/intake.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "Ideation/scripts/match-themes.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "Ideation/skills/ideate.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "README.md",
+      "role": "catalog",
+      "last_commit": "0c726eb 2026-07-29T22:00:47-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "_shared/voice.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "CONTEXT.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/CONTEXT.md",
+      "role": "contract",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/CONTEXT.md",
+        "Ideation/skills/ideate.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/brews/araumi-of-the-dead-tide-draft.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/scripts/generate-starter-deck.py"
+      ]
+    },
+    {
+      "path": "deckbuilding/brews/don-andres-the-renegade-draft.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/brews/teval-life-exchange-draft.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/brews/zimone-and-dina-draft.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "optimization/sessions/zimone-and-dina-2026-06-10.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/brews/zimone-dina-lands-draft.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/decklists/.gitkeep",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/docs/archetypes.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/docs/card-evaluation.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/docs/formats.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "optimization/docs/mana-base-theory.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/docs/game-changers.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/docs/zimone-dina-primer.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/scripts/calculate-target-ratios.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/export-to-moxfield.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-art-cards.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-card-data.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "Ideation/skills/ideate.md",
+        "deckbuilding/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-commander-staples.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/fetch-reference-lists.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/generate-starter-deck.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/validate-color-identity.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/validate-combos.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/scripts/validate-deck.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "deckbuilding/docs/formats.md",
+        "deckbuilding/skills/brew-commander.md"
+      ]
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/aristocrats.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/artifacts.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/blink-etb.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/counters.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/enchantress.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/graveyard.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/lands.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/spellslinger.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/theft-chaos.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/tokens.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/engines/tribal.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/burn.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/combo.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/control.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/go-tall.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/go-wide.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/politics.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/game-plans/stax.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/win-cons/alternate-win-cons.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/win-cons/commander-damage.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/win-cons/life-depletion.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/win-cons/mill.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/archetypes/win-cons/poison.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/brew-commander.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "deckbuilding/skills/card-search.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/CONTEXT.md",
+      "role": "contract",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "CONTEXT.md"
+      ]
+    },
+    {
+      "path": "optimization/docs/mana-base-theory.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "optimization/skills/mana-base.md",
+        "optimization/skills/tune-deck.md"
+      ]
+    },
+    {
+      "path": "optimization/docs/sideboard-guide.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "optimization/skills/meta-check.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/color-analysis.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/CONTEXT.md",
+        "optimization/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/deck-health.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/skills/brew-commander.md",
+        "optimization/CONTEXT.md",
+        "optimization/skills/tune-deck.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/fetch-deck.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "optimization/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/goldfish.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/skills/brew-commander.md",
+        "optimization/CONTEXT.md",
+        "optimization/skills/tune-deck.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/mana-curve.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "optimization/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "optimization/scripts/validate-decklist.py",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": [
+        "deckbuilding/docs/formats.md",
+        "optimization/CONTEXT.md"
+      ]
+    },
+    {
+      "path": "optimization/sessions/.gitkeep",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/sessions/don-andres-2026-06-29.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/sessions/zimone-and-dina-2026-06-10.md",
+      "role": "product",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/skills/mana-base.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/skills/meta-check.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    },
+    {
+      "path": "optimization/skills/tune-deck.md",
+      "role": "factory",
+      "last_commit": "aba7538 2026-07-29T21:51:24-06:00",
+      "referenced_by": []
+    }
+  ]
+}

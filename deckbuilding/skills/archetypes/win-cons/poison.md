@@ -52,11 +52,11 @@ Three ways to accumulate poison counters:
 
 ---
 
-## Bracket Notes
+## Current bracket review
 
-- **Brackets 1–2:** Infect is typically unwelcome socially; flag with pod before including
-- **Bracket 3:** Viable with restraint; avoid Skithiryx, the Blight Dragon at this level
-- **Bracket 4–5:** Fastest kill con in Commander; Phyrexian Crusader, Skithiryx, Blightsteel Colossus
+Use `Ideation/docs/brackets.md` and `deckbuilding/docs/game-changers.md`
+from the repository root after the freshness check. Assess combo timing and table
+expectations with the player; this strategy guide is not an official bracket rule.
 
 ---
 

@@ -24,13 +24,14 @@ import argparse
 import urllib.request
 import urllib.parse
 import urllib.error
+import contextlib
 
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
 MOXFIELD_API = "https://api.moxfield.com/v2"
 ARCHIDEKT_API = "https://archidekt.com/api"
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+USER_AGENT = "MTGCommanderBuilder/0.2 (https://github.com/StoneSagala/mtg-commander-builder)"
 
 MOXFIELD_SORT = {
     "views": "views",
@@ -58,7 +59,7 @@ def http_get(url, params=None, headers=None):
     if headers:
         default_headers.update(headers)
     req = urllib.request.Request(url, headers=default_headers)
-    with urllib.request.urlopen(req) as resp:
+    with urllib.request.urlopen(req, timeout=20) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
@@ -125,22 +126,22 @@ def moxfield_to_summary(deck):
 def archidekt_search(commander_name, sort_by="views", top_n=3, theme=None):
     # Combine commander name and theme keywords into one query
     # Archidekt searches deck names and descriptions
-    q = commander_name
+    q = commander_name.split(",")[0]
     if theme:
         q += f" {theme}"
     params = {
-        "q": q,
-        "formats": ARCHIDEKT_COMMANDER_FORMAT,
+        "name": q,
+        "deckFormat": ARCHIDEKT_COMMANDER_FORMAT,
         "orderBy": ARCHIDEKT_SORT.get(sort_by, "-viewCount"),
         "pageSize": top_n,
         "page": 1,
     }
-    data = http_get(f"{ARCHIDEKT_API}/decks/", params=params)
-    return data.get("results", [])
+    data = http_get(f"{ARCHIDEKT_API}/decks/v3/", params=params)
+    return data.get("results", [])[:top_n]
 
 
 def archidekt_deck_cards(deck_id):
-    data = http_get(f"{ARCHIDEKT_API}/decks/{deck_id}/small/")
+    data = http_get(f"{ARCHIDEKT_API}/decks/{deck_id}/")
     sections = {}
     cards = data.get("cards", [])
     for entry in cards:
@@ -203,50 +204,55 @@ def _type_to_section(type_line):
     return "Other"
 
 
-def fetch_all(commander_name, source, sort_by, top_n, fetch_cards, theme=None):
+def fetch_all(commander_name, source, sort_by, top_n, fetch_cards, theme=None, statuses=None):
     """
     Fetch deck summaries (and optionally card lists) from the requested source(s).
     Returns list of (summary_dict, card_data_dict_or_None).
     """
     results = []
+    statuses = statuses if statuses is not None else {}
     theme_note = f" + theme: '{theme}'" if theme else ""
 
     if source in ("moxfield", "all"):
         print(f"  Moxfield: searching for '{commander_name}'{theme_note}...")
         try:
             decks = moxfield_search(commander_name, sort_by=sort_by, top_n=top_n, theme=theme)
+            statuses["moxfield"] = {"status": "pass", "found": len(decks)}
             for deck in decks:
                 summary = moxfield_to_summary(deck)
                 cards = None
                 if fetch_cards:
                     try:
                         cards = moxfield_deck_cards(summary["id"])
-                    except urllib.error.HTTPError:
-                        pass
+                    except (urllib.error.URLError, TimeoutError, ValueError) as error:
+                        summary["cards_error"] = str(error)
                 results.append((summary, cards))
             print(f"    Found {len(decks)} Moxfield list(s).")
-        except urllib.error.HTTPError as e:
-            if e.code == 403:
+        except (urllib.error.URLError, TimeoutError, ValueError) as e:
+            statuses["moxfield"] = {"status": "blocked" if getattr(e, "code", None) == 403 else "unavailable", "error": str(e), "fallback": "Archidekt or paste/export a decklist"}
+            if getattr(e, "code", None) == 403:
                 print(f"    Moxfield returned 403 — API access may be restricted.")
             else:
-                print(f"    Moxfield error {e.code}: {e.reason}")
+                print(f"    Moxfield unavailable: {e}")
 
     if source in ("archidekt", "all"):
         print(f"  Archidekt: searching for '{commander_name}'{theme_note}...")
         try:
             decks = archidekt_search(commander_name, sort_by=sort_by, top_n=top_n, theme=theme)
+            statuses["archidekt"] = {"status": "pass", "found": len(decks)}
             for deck in decks:
                 summary = archidekt_to_summary(deck)
                 cards = None
                 if fetch_cards:
                     try:
                         cards = archidekt_deck_cards(summary["id"])
-                    except urllib.error.HTTPError:
-                        pass
+                    except (urllib.error.URLError, TimeoutError, ValueError) as error:
+                        summary["cards_error"] = str(error)
                 results.append((summary, cards))
             print(f"    Found {len(decks)} Archidekt list(s).")
-        except urllib.error.HTTPError as e:
-            print(f"    Archidekt error {e.code}: {e.reason}")
+        except (urllib.error.URLError, TimeoutError, ValueError) as e:
+            statuses["archidekt"] = {"status": "unavailable", "error": str(e)}
+            print(f"    Archidekt unavailable: {e}")
 
     return results
 
@@ -316,8 +322,12 @@ def main():
     parser.add_argument("--format", choices=["text", "json"], default="text")
     args = parser.parse_args()
 
-    print(f"Fetching reference decklists for '{args.commander}'...")
-    results = fetch_all(args.commander, args.source, args.sort, args.top, args.cards, theme=args.theme)
+    if args.top < 1:
+        parser.error("--top must be positive")
+    statuses = {}
+    with contextlib.redirect_stdout(sys.stderr):
+        print(f"Fetching reference decklists for '{args.commander}'...")
+        results = fetch_all(args.commander, args.source, args.sort, args.top, args.cards, theme=args.theme, statuses=statuses)
 
     if args.format == "json":
         output = []
@@ -326,9 +336,11 @@ def main():
             if card_data:
                 entry["cards"] = card_data
             output.append(entry)
-        print(json.dumps(output, indent=2))
+        print(json.dumps({"results": output, "providers": statuses}, indent=2))
     else:
         print_results(args.commander, results, show_cards=args.cards, theme=args.theme)
+    if statuses and all(status["status"] != "pass" for status in statuses.values()):
+        sys.exit(2)
 
 
 if __name__ == "__main__":
