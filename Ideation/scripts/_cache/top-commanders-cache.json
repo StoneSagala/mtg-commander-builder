@@ -1,447 +1,447 @@
 {
-  "fetched_at": "2026-11-12T17:13:21.690781+00:00",
+  "fetched_at": "2026-11-14T16:35:20.823376+00:00",
   "source": "https://json.edhrec.com/pages/commanders/year.json",
   "period": "year",
   "count": 100,
   "commanders": [
     {
       "name": "Y'shtola, Night's Blessed",
-      "decks": 59532,
+      "decks": 59684,
       "rank": 1
     },
     {
       "name": "Edgar Markov",
-      "decks": 52713,
+      "decks": 52717,
       "rank": 2
     },
     {
       "name": "The Ur-Dragon",
-      "decks": 51757,
+      "decks": 51766,
       "rank": 3
     },
     {
       "name": "Atraxa, Praetors' Voice",
-      "decks": 46235,
+      "decks": 46269,
       "rank": 4
     },
     {
       "name": "Krenko, Mob Boss",
-      "decks": 45203,
+      "decks": 45192,
       "rank": 5
     },
     {
       "name": "Vivi Ornitier",
-      "decks": 43933,
+      "decks": 44038,
       "rank": 6
     },
     {
       "name": "Sauron, the Dark Lord",
-      "decks": 41504,
+      "decks": 41531,
       "rank": 7
     },
     {
       "name": "Teval, the Balanced Scale",
-      "decks": 41280,
+      "decks": 41395,
       "rank": 8
     },
     {
       "name": "Kaalia of the Vast",
-      "decks": 41059,
+      "decks": 41090,
       "rank": 9
     },
     {
       "name": "Fire Lord Azula",
-      "decks": 40295,
+      "decks": 40394,
       "rank": 10
     },
     {
       "name": "Giada, Font of Hope",
-      "decks": 39557,
+      "decks": 39623,
       "rank": 11
     },
     {
       "name": "Pantlaza, Sun-Favored",
-      "decks": 38151,
+      "decks": 38189,
       "rank": 12
     },
     {
       "name": "Ms. Bumbleflower",
-      "decks": 38021,
+      "decks": 38036,
       "rank": 13
     },
     {
       "name": "Lathril, Blade of the Elves",
-      "decks": 36457,
+      "decks": 36413,
       "rank": 14
     },
     {
       "name": "Toph, the First Metalbender",
-      "decks": 35401,
+      "decks": 35475,
       "rank": 15
     },
     {
       "name": "The Wise Mothman",
-      "decks": 34766,
+      "decks": 34795,
       "rank": 16
     },
     {
       "name": "Jodah, the Unifier",
-      "decks": 34547,
+      "decks": 34595,
       "rank": 17
     },
     {
       "name": "Hearthhull, the Worldseed",
-      "decks": 33996,
+      "decks": 34106,
       "rank": 18
     },
     {
       "name": "Cloud, Ex-SOLDIER",
-      "decks": 33969,
+      "decks": 34047,
       "rank": 19
     },
     {
       "name": "Kefka, Court Mage",
-      "decks": 33336,
+      "decks": 33407,
       "rank": 20
     },
     {
       "name": "Nekusar, the Mindrazer",
-      "decks": 32860,
+      "decks": 32884,
       "rank": 21
     },
     {
       "name": "Sephiroth, Fabled SOLDIER",
-      "decks": 32588,
+      "decks": 32668,
       "rank": 22
     },
     {
       "name": "Kenrith, the Returned King",
-      "decks": 32337,
+      "decks": 32386,
       "rank": 23
     },
     {
       "name": "Yuriko, the Tiger's Shadow",
-      "decks": 31753,
+      "decks": 31739,
       "rank": 24
     },
     {
       "name": "Isshin, Two Heavens as One",
-      "decks": 31505,
+      "decks": 31528,
       "rank": 25
     },
     {
       "name": "Baylen, the Haymaker",
-      "decks": 29947,
+      "decks": 29880,
       "rank": 26
     },
     {
       "name": "Valgavoth, Harrower of Souls",
-      "decks": 29269,
+      "decks": 29238,
       "rank": 27
     },
     {
       "name": "Miirym, Sentinel Wyrm",
-      "decks": 28929,
+      "decks": 28927,
       "rank": 28
     },
     {
       "name": "Hashaton, Scarab's Fist",
-      "decks": 28725,
+      "decks": 28795,
       "rank": 29
     },
     {
-      "name": "Chatterfang, Squirrel General",
-      "decks": 28328,
+      "name": "Ashling, the Limitless",
+      "decks": 28352,
       "rank": 30
     },
     {
-      "name": "Ashling, the Limitless",
-      "decks": 28285,
+      "name": "Chatterfang, Squirrel General",
+      "decks": 28343,
       "rank": 31
     },
     {
       "name": "Ulalek, Fused Atrocity",
-      "decks": 28175,
+      "decks": 28165,
       "rank": 32
     },
     {
       "name": "Frodo, Adventurous Hobbit // Sam, Loyal Attendant",
-      "decks": 27974,
+      "decks": 27991,
       "rank": 33
     },
     {
       "name": "Esika, God of the Tree",
-      "decks": 26913,
+      "decks": 26919,
       "rank": 34
     },
     {
       "name": "Bello, Bard of the Brambles",
-      "decks": 26710,
+      "decks": 26735,
       "rank": 35
     },
     {
       "name": "Hakbal of the Surging Soul",
-      "decks": 25773,
+      "decks": 25793,
       "rank": 36
     },
     {
       "name": "Muldrotha, the Gravetide",
-      "decks": 25728,
+      "decks": 25704,
       "rank": 37
     },
     {
       "name": "Rin and Seri, Inseparable",
-      "decks": 25674,
+      "decks": 25672,
       "rank": 38
     },
     {
       "name": "Glarb, Calamity's Augur",
-      "decks": 24868,
+      "decks": 24882,
       "rank": 39
     },
     {
       "name": "Maralen, Fae Ascendant",
-      "decks": 24060,
+      "decks": 24122,
       "rank": 40
     },
     {
       "name": "Animar, Soul of Elements",
-      "decks": 24059,
+      "decks": 24087,
       "rank": 41
     },
     {
       "name": "Kuja, Genome Sorcerer",
-      "decks": 23872,
+      "decks": 23937,
       "rank": 42
     },
     {
-      "name": "Arcades, the Strategist",
-      "decks": 23503,
+      "name": "Aragorn, the Uniter",
+      "decks": 23514,
       "rank": 43
     },
     {
-      "name": "Aragorn, the Uniter",
-      "decks": 23501,
+      "name": "Arcades, the Strategist",
+      "decks": 23491,
       "rank": 44
     },
     {
-      "name": "Mr. House, President and CEO",
-      "decks": 23354,
+      "name": "Ureni of the Unwritten",
+      "decks": 23367,
       "rank": 45
     },
     {
-      "name": "Ureni of the Unwritten",
-      "decks": 23323,
+      "name": "Mr. House, President and CEO",
+      "decks": 23364,
       "rank": 46
     },
     {
       "name": "Caesar, Legion's Emperor",
-      "decks": 23307,
+      "decks": 23329,
       "rank": 47
     },
     {
       "name": "Ygra, Eater of All",
-      "decks": 23263,
+      "decks": 23275,
       "rank": 48
     },
     {
-      "name": "Wilhelt, the Rotcleaver",
-      "decks": 23133,
+      "name": "Oloro, Ageless Ascetic",
+      "decks": 23154,
       "rank": 49
     },
     {
-      "name": "Oloro, Ageless Ascetic",
-      "decks": 23126,
+      "name": "Wilhelt, the Rotcleaver",
+      "decks": 23144,
       "rank": 50
     },
     {
-      "name": "Flubs, the Fool",
-      "decks": 23031,
+      "name": "Tidus, Yuna's Guardian",
+      "decks": 23064,
       "rank": 51
     },
     {
-      "name": "Tidus, Yuna's Guardian",
-      "decks": 22998,
+      "name": "Flubs, the Fool",
+      "decks": 23041,
       "rank": 52
     },
     {
       "name": "Breya, Etherium Shaper",
-      "decks": 22937,
+      "decks": 22954,
       "rank": 53
     },
     {
       "name": "The Necrobloom",
-      "decks": 22834,
+      "decks": 22847,
       "rank": 54
     },
     {
       "name": "Meren of Clan Nel Toth",
-      "decks": 22770,
+      "decks": 22788,
       "rank": 55
     },
     {
       "name": "Kinnan, Bonder Prodigy",
-      "decks": 22729,
+      "decks": 22763,
       "rank": 56
     },
     {
       "name": "Teysa Karlov",
-      "decks": 21962,
+      "decks": 21971,
       "rank": 57
     },
     {
       "name": "Zurgo Stormrender",
-      "decks": 21906,
+      "decks": 21947,
       "rank": 58
     },
     {
       "name": "The Wandering Minstrel",
-      "decks": 21831,
+      "decks": 21889,
       "rank": 59
     },
     {
-      "name": "Zhulodok, Void Gorger",
-      "decks": 21788,
+      "name": "Felothar the Steadfast",
+      "decks": 21819,
       "rank": 60
     },
     {
-      "name": "Felothar the Steadfast",
-      "decks": 21781,
+      "name": "Zhulodok, Void Gorger",
+      "decks": 21802,
       "rank": 61
     },
     {
-      "name": "Atla Palani, Nest Tender",
-      "decks": 21765,
+      "name": "Korvold, Fae-Cursed King",
+      "decks": 21793,
       "rank": 62
     },
     {
-      "name": "Korvold, Fae-Cursed King",
-      "decks": 21741,
+      "name": "Atla Palani, Nest Tender",
+      "decks": 21780,
       "rank": 63
     },
     {
       "name": "Avatar Aang",
-      "decks": 21710,
+      "decks": 21777,
       "rank": 64
     },
     {
       "name": "Tom Bombadil",
-      "decks": 21580,
+      "decks": 21585,
       "rank": 65
     },
     {
       "name": "Gishath, Sun's Avatar",
-      "decks": 21526,
+      "decks": 21528,
       "rank": 66
     },
     {
       "name": "Terra, Herald of Hope",
-      "decks": 21440,
+      "decks": 21508,
       "rank": 67
     },
     {
       "name": "Queen Marchesa",
-      "decks": 21298,
+      "decks": 21336,
       "rank": 68
     },
     {
       "name": "Betor, Ancestor's Voice",
-      "decks": 21247,
+      "decks": 21307,
       "rank": 69
     },
     {
       "name": "Shorikai, Genesis Engine",
-      "decks": 21201,
+      "decks": 21196,
       "rank": 70
     },
     {
       "name": "Choco, Seeker of Paradise",
-      "decks": 21073,
+      "decks": 21107,
       "rank": 71
     },
     {
-      "name": "Urza, Lord High Artificer",
-      "decks": 21043,
+      "name": "Auntie Ool, Cursewretch",
+      "decks": 21081,
       "rank": 72
     },
     {
-      "name": "Auntie Ool, Cursewretch",
-      "decks": 21027,
+      "name": "Urza, Lord High Artificer",
+      "decks": 21053,
       "rank": 73
     },
     {
       "name": "Arabella, Abandoned Doll",
-      "decks": 20956,
+      "decks": 20916,
       "rank": 74
     },
     {
       "name": "Helga, Skittish Seer",
-      "decks": 20873,
+      "decks": 20891,
       "rank": 75
     },
     {
-      "name": "Go-Shintai of Life's Origin",
-      "decks": 20779,
+      "name": "Kotis, the Fangkeeper",
+      "decks": 20797,
       "rank": 76
     },
     {
-      "name": "Kotis, the Fangkeeper",
-      "decks": 20758,
+      "name": "Go-Shintai of Life's Origin",
+      "decks": 20790,
       "rank": 77
     },
     {
       "name": "Terra, Magical Adept",
-      "decks": 20643,
+      "decks": 20674,
       "rank": 78
     },
     {
       "name": "K'rrik, Son of Yawgmoth",
-      "decks": 20604,
+      "decks": 20636,
       "rank": 79
     },
     {
-      "name": "Zaxara, the Exemplary",
-      "decks": 20521,
+      "name": "Kilo, Apogee Mind",
+      "decks": 20544,
       "rank": 80
     },
     {
-      "name": "Kilo, Apogee Mind",
-      "decks": 20492,
+      "name": "Zaxara, the Exemplary",
+      "decks": 20523,
       "rank": 81
     },
     {
       "name": "Sisay, Weatherlight Captain",
-      "decks": 20386,
+      "decks": 20421,
       "rank": 82
     },
     {
       "name": "The First Sliver",
-      "decks": 20179,
+      "decks": 20188,
       "rank": 83
     },
     {
       "name": "Xyris, the Writhing Storm",
-      "decks": 19963,
+      "decks": 19946,
       "rank": 84
     },
     {
       "name": "Ghyrson Starn, Kelermorph",
-      "decks": 19927,
+      "decks": 19931,
       "rank": 85
     },
     {
       "name": "Norman Osborn",
-      "decks": 19768,
+      "decks": 19814,
       "rank": 86
     },
     {
       "name": "Ragost, Deft Gastronaut",
-      "decks": 19707,
+      "decks": 19741,
       "rank": 87
     },
     {
       "name": "Hope Estheim",
-      "decks": 19489,
+      "decks": 19534,
       "rank": 88
     },
     {
@@ -451,32 +451,32 @@
     },
     {
       "name": "Henzie \"Toolbox\" Torre",
-      "decks": 18986,
+      "decks": 18982,
       "rank": 90
     },
     {
       "name": "Captain N'ghathrod",
-      "decks": 18941,
+      "decks": 18953,
       "rank": 91
     },
     {
       "name": "Witherbloom, the Balancer",
-      "decks": 18791,
+      "decks": 18844,
       "rank": 92
+    },
+    {
+      "name": "High Perfect Morcant",
+      "decks": 18781,
+      "rank": 93
     },
     {
       "name": "Urtet, Remnant of Memnarch",
       "decks": 18766,
-      "rank": 93
-    },
-    {
-      "name": "Omnath, Locus of Creation",
-      "decks": 18749,
       "rank": 94
     },
     {
-      "name": "High Perfect Morcant",
-      "decks": 18744,
+      "name": "Omnath, Locus of Creation",
+      "decks": 18758,
       "rank": 95
     },
     {
@@ -486,22 +486,22 @@
     },
     {
       "name": "Alela, Cunning Conqueror",
-      "decks": 18238,
+      "decks": 18242,
       "rank": 97
     },
     {
       "name": "Magda, Brazen Outlaw",
-      "decks": 18223,
+      "decks": 18225,
       "rank": 98
     },
     {
       "name": "Obeka, Splitter of Seconds",
-      "decks": 18153,
+      "decks": 18168,
       "rank": 99
     },
     {
-      "name": "Marneus Calgar",
-      "decks": 18007,
+      "name": "Jin Sakai, Ghost of Tsushima",
+      "decks": 18020,
       "rank": 100
     }
   ]
